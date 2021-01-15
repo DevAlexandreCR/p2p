@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Constants\Permissions;
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
@@ -13,6 +15,10 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        foreach (Permissions::values() as $permission) {
+            Permission::create([
+                'name' => $permission
+            ]);
+        }
     }
 }
