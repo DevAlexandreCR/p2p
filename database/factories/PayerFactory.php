@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Cart;
+use App\Models\Payer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CartFactory extends Factory
+class PayerFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Cart::class;
+    protected $model = Payer::class;
 
     /**
      * Define the model's default state.
