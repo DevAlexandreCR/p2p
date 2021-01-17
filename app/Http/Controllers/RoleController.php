@@ -2,84 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Http\Request;
+use App\Http\Requests\Roles\StoreRequest;
+use App\Http\Requests\Roles\UpdateRequest;
+use App\Interfaces\RoleInterface;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    private $roles;
+
+    public function __construct(RoleInterface $roles)
     {
-        //
+        $this->authorizeResource(Role::class);
+        $this->roles = $roles;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function index(): View
     {
-        //
+        return view('dashboard.roles.index', [
+            'roles' => $this->roles->all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        //
+        $this->roles->store($request);
+
+        return redirect(route('roles.index'))
+            ->with('success', trans('resource.success'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @param UpdateRequest $request
+     * @param Role $role
+     * @return RedirectResponse
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role): RedirectResponse
     {
-        //
+        $this->roles->update($request, $role);
+
+        return redirect(route('roles.index'))
+            ->with('success', trans('resource.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @param Role $role
+     * @return RedirectResponse
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): RedirectResponse
     {
-        //
+        $this->roles->destroy($role);
+
+        return redirect(route('roles.index'))
+            ->with('success', trans('resource.success'));
     }
 }
