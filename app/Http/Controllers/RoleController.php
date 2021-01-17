@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Roles\StoreRequest;
+use App\Http\Requests\Roles\UpdateRequest;
+use App\Interfaces\RoleInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
 
-    public function __construct()
+    private $roles;
+
+    public function __construct(RoleInterface $roles)
     {
         $this->authorizeResource(Role::class);
+        $this->roles = $roles;
     }
 
     /**
@@ -24,18 +28,20 @@ class RoleController extends Controller
     public function index(): View
     {
         return view('dashboard.roles.index', [
-            'roles' => null
+            'roles' => $this->roles->all()
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
+        $this->roles->store($request);
+
         return redirect(route('roles.index'))
             ->with('success', trans('resource.success'));
     }
@@ -44,23 +50,29 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  Role  $role
-     * @return Response
+     * @param UpdateRequest $request
+     * @param Role $role
+     * @return RedirectResponse
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role): RedirectResponse
     {
-        //
+        $this->roles->update($request, $role);
+
+        return redirect(route('roles.index'))
+            ->with('success', trans('resource.success'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Role  $role
-     * @return Response
+     * @param Role $role
+     * @return RedirectResponse
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): RedirectResponse
     {
-        //
+        $this->roles->destroy($role);
+
+        return redirect(route('roles.index'))
+            ->with('success', trans('resource.success'));
     }
 }

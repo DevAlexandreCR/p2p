@@ -42,7 +42,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role)
     {
-        //
+        return $user->hasPermissionTo(Permissions::EDIT_ROLES);
     }
 
     /**
@@ -54,6 +54,6 @@ class RolePolicy
      */
     public function delete(User $user, Role $role)
     {
-        //
+        return $user->hasPermissionTo(Permissions::DELETE_ROLES);
     }
 }
