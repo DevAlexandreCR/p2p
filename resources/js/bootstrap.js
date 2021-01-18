@@ -1,4 +1,6 @@
-window._ = require('lodash');
+import * as $ from 'jquery'
+
+window._ = require('lodash')
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -7,10 +9,10 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+  window.Popper = require('popper.js').default
+  window.$ = window.jQuery = require('jquery')
 
-    require('bootstrap');
+  require('bootstrap')
 } catch (e) {}
 
 /**
@@ -19,9 +21,9 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = require('axios')
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 /**
  * We'll load the toastr library which alert notificacions
@@ -30,8 +32,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.toastr = require('toastr')
 
 document.addEventListener('submit', function (e) {
-    const input = $(e.target).find('button[type=submit]')
-    input.attr('disabled', true)
+  const input = $(e.target).find('button[type=submit]')
+  input.attr('disabled', true)
 })
 
 /**
