@@ -63,7 +63,7 @@ class RoleController extends Controller
         $this->roles->update($request, $role);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.updated'));
     }
 
     /**
@@ -77,6 +77,6 @@ class RoleController extends Controller
         $this->roles->destroy($role);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.removed'));
     }
 }

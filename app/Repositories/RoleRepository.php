@@ -53,9 +53,7 @@ class RoleRepository implements RoleInterface
      */
     public function update(Request $request, Model $model)
     {
-        return $model->update([
-            'name' => $request->get('name')
-        ]);
+        return $model->syncPermissions($request->get('permissions'));
     }
 
     /**
