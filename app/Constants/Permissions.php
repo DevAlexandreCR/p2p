@@ -9,6 +9,9 @@ use MyCLabs\Enum\Enum;
 class Permissions extends Enum
 {
     //users
+    public const VIEW_DASHBOARD = 'view dashboard';
+
+    //users
     public const VIEW_USERS = 'view users';
     public const EDIT_USERS = 'edit users';
     public const DELETE_USERS = 'delete users';
