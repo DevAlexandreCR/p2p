@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Roles\StoreRequest;
 use App\Http\Requests\Roles\UpdateRequest;
+use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,11 +14,13 @@ class RoleController extends Controller
 {
 
     private $roles;
+    private $permissions;
 
-    public function __construct(RoleInterface $roles)
+    public function __construct(RoleInterface $roles, PermissionInterface $permissions)
     {
         $this->authorizeResource(Role::class);
         $this->roles = $roles;
+        $this->permissions = $permissions;
     }
 
     /**
@@ -28,7 +31,8 @@ class RoleController extends Controller
     public function index(): View
     {
         return view('dashboard.roles.index', [
-            'roles' => $this->roles->all()
+            'roles' => $this->roles->all(),
+            'permissions' => $this->permissions->all()
         ]);
     }
 

@@ -23,7 +23,7 @@ class RoleRepository implements RoleInterface
      */
     public function all()
     {
-        return $this->role::all('name');
+        return $this->role::all('id', 'name');
     }
 
     /**
@@ -32,7 +32,7 @@ class RoleRepository implements RoleInterface
      */
     public function find(int $id)
     {
-        // TODO: Implement find() method.
+        return $this->role::findById($id);
     }
 
     /**
