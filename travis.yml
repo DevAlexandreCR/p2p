@@ -1,0 +1,41 @@
+language: php
+
+services:
+  - mysql
+
+cache:
+  directories:
+    - node_modules
+    - ~/.npm
+    - vendor
+php:
+  - 7.4
+  -
+git:
+  depth: 3
+branches:
+  only:
+    - master
+    - develop
+    -
+before_install:
+  - cp .env.travis .env
+  - mysql -e 'CREATE DATABASE testing;'
+
+before_script:
+  - composer install --no-interaction
+  - php artisan migrate:refresh --seed --force
+  - npm install
+
+script:
+  - composer phpcs-auto-check-project
+  - npm run lint-check
+  - composer phpstan
+  - php artisan test
+
+notifications:
+  email:
+    recipients:
+      - devalexandrecr@gmail.com
+    on_success: never
+    on_failure: always
