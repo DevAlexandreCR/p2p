@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Constants;
-
 
 use MyCLabs\Enum\Enum;
 
@@ -52,5 +50,4 @@ class Permissions extends Enum
     public const EDIT_PAYERS = 'edit payers';
     public const CREATE_PAYERS = 'create payers';
     public const DELETE_PAYERS = 'delete payers';
-
 }

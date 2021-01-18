@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Repositories;
-
 
 use App\Interfaces\PermissionInterface;
 use Illuminate\Database\Eloquent\Collection;

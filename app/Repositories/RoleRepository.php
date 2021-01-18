@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Repositories;
-
 
 use App\Interfaces\RoleInterface;
 use Illuminate\Database\Eloquent\Model;

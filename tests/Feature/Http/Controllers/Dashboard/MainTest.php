@@ -16,7 +16,7 @@ class MainTest extends BaseControllerTest
     {
         $user = User::factory()->create([
             'email' => $email = $this->faker->email,
-            'password' =>bcrypt($pass = $this->faker->password)
+            'password' => bcrypt($pass = $this->faker->password)
         ]);
 
         $user->assignRole(Roles::ADMIN);
