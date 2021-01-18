@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Decorators;
-
 
 use App\Interfaces\RoleInterface;
 use App\Repositories\RoleRepository;
@@ -25,7 +23,7 @@ class RoleDecorator implements RoleInterface
      */
     public function all()
     {
-        return Cache::tags('roles')->rememberForever('all', function (){
+        return Cache::tags('roles')->rememberForever('all', function () {
             return $this->roleRepository->all();
         });
     }
@@ -36,7 +34,7 @@ class RoleDecorator implements RoleInterface
      */
     public function find(int $id)
     {
-        return Cache::tags('roles')->rememberForever($id, function () use ($id){
+        return Cache::tags('roles')->rememberForever($id, function () use ($id) {
             return $this->roleRepository->find($id);
         });
     }

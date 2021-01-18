@@ -24,7 +24,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -51,7 +50,7 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if ($user->hasAnyRole(Role::all('name')->toArray())){
+        if ($user->hasAnyRole(Role::all('name')->toArray())) {
             return redirect(route('dashboard'));
         }
     }

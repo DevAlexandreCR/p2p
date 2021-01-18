@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Decorators;
-
 
 use App\Interfaces\PermissionInterface;
 use App\Repositories\PermissionRepository;
@@ -23,7 +21,7 @@ class PermissionsDecorator implements PermissionInterface
      */
     public function all(): Collection
     {
-        return Cache::tags('permissions')->rememberForever('all', function (){
+        return Cache::tags('permissions')->rememberForever('all', function () {
             return $this->permissionRepository->all();
         });
     }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\RoleController;
-
 
 use App\Constants\Permissions;
 use Spatie\Permission\Models\Role;

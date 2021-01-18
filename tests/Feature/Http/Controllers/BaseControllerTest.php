@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers;
-
 
 use App\Models\User;
 use Database\Seeders\TestDatabaseSeeder;
@@ -27,20 +25,19 @@ abstract class BaseControllerTest extends TestCase
      *
      * @return void
      */
-    public abstract function testAnUserWithPermissionsCanExecuteThisAction();
+    abstract public function testAnUserWithPermissionsCanExecuteThisAction();
 
     /**
      * Test an user without permissions can't execute this action.
      *
      * @return void
      */
-    public abstract function testAnUserWithoutPermissionsCannotExecuteThisAction();
+    abstract public function testAnUserWithoutPermissionsCannotExecuteThisAction();
 
     /**
      * Test user unauthenticated is redirected to Login.
      *
      * @return void
      */
-    public abstract function testAnUserUnauthenticatedIsRedirectedToLogin();
-
+    abstract public function testAnUserUnauthenticatedIsRedirectedToLogin();
 }

@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers\RoleController;
 use App\Constants\Permissions;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
-
 class StoreTest extends BaseControllerTest
 {
 
