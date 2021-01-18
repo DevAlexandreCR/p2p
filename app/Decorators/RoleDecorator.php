@@ -26,7 +26,7 @@ class RoleDecorator implements RoleInterface
     public function all()
     {
         return Cache::tags('roles')->rememberForever('all', function (){
-            $this->roleRepository->all();
+            return $this->roleRepository->all();
         });
     }
 
@@ -36,7 +36,9 @@ class RoleDecorator implements RoleInterface
      */
     public function find(int $id)
     {
-        // TODO: Implement find() method.
+        return Cache::tags('roles')->rememberForever($id, function () use ($id){
+            return $this->roleRepository->find($id);
+        });
     }
 
     /**

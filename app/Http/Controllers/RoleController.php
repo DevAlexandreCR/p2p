@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Roles\StoreRequest;
 use App\Http\Requests\Roles\UpdateRequest;
+use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,11 +14,13 @@ class RoleController extends Controller
 {
 
     private $roles;
+    private $permissions;
 
-    public function __construct(RoleInterface $roles)
+    public function __construct(RoleInterface $roles, PermissionInterface $permissions)
     {
         $this->authorizeResource(Role::class);
         $this->roles = $roles;
+        $this->permissions = $permissions;
     }
 
     /**
@@ -28,7 +31,8 @@ class RoleController extends Controller
     public function index(): View
     {
         return view('dashboard.roles.index', [
-            'roles' => $this->roles->all()
+            'roles' => $this->roles->all(),
+            'permissions' => $this->permissions->all()
         ]);
     }
 
@@ -43,7 +47,7 @@ class RoleController extends Controller
         $this->roles->store($request);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.created'));
     }
 
 
@@ -59,7 +63,7 @@ class RoleController extends Controller
         $this->roles->update($request, $role);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.updated'));
     }
 
     /**
@@ -73,6 +77,6 @@ class RoleController extends Controller
         $this->roles->destroy($role);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.removed'));
     }
 }

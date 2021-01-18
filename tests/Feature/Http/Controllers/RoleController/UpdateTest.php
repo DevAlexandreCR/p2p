@@ -3,6 +3,8 @@
 namespace Tests\Feature\Http\Controllers\RoleController;
 
 use App\Constants\Permissions;
+use App\Constants\Roles;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
@@ -16,9 +18,12 @@ class UpdateTest extends BaseControllerTest
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
         $this->admin->givePermissionTo(Permissions::EDIT_ROLES);
-
-        $response = $this->actingAs($this->admin)->put(route('roles.update', Role::first()), [
-            'name' => $name = 'role updated'
+        $this->admin->assignRole(Roles::ADMIN);
+        $role = Role::findByName(Roles::ADMIN);
+        $permission = Permission::findByName(Permissions::CREATE_USERS);
+        $response = $this->actingAs($this->admin)
+            ->put(route('roles.update', $role->id), [
+            'permissions' => [$permission->id]
         ]);
 
         $response
@@ -26,9 +31,7 @@ class UpdateTest extends BaseControllerTest
             ->assertRedirect(route('roles.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('roles', [
-            'name' => $name
-        ]);
+        $this->assertTrue($this->admin->can(Permissions::CREATE_USERS));
     }
 
     /**
@@ -36,21 +39,20 @@ class UpdateTest extends BaseControllerTest
      *
      * @return void
      */
-    public function testValidateRequestKeyNameShouldBeString()
+    public function testResponseErrorsIfDataIsNotValid()
     {
         $this->admin->givePermissionTo(Permissions::EDIT_ROLES);
-
-        $response = $this->actingAs($this->admin)->put(route('roles.update', Role::first()), [
-            'name' => $role = 1
+        $role = Role::findByName(Roles::ADMIN);
+        $response = $this->actingAs($this->admin)->put(route('roles.update', $role->id), [
+            'permissions' => [
+                'not string',
+                100000
+            ]
         ]);
 
         $response
             ->assertStatus(302)
-            ->assertSessionHasErrors(['name']);
-
-        $this->assertDatabaseMissing('roles', [
-            'name' => $role
-        ]);
+            ->assertSessionHasErrors(['permissions.*']);
     }
 
     /**
