@@ -11,7 +11,7 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view dashboard view.
      *
      * @param User $user
      * @return mixed
