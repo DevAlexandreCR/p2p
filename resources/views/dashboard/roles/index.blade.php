@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="container py-4">
-            <button type="button" data-toggle="modal" data-target="#addRole"class="btn btn-dark">{{trans('Add role')}}</button>
+            <button type="button" data-toggle="modal" data-target="#addRole" class="btn btn-dark">{{trans('Add role')}}</button>
         </div>
         <div class="row">
             <div class="col-md-3">
@@ -51,9 +51,10 @@
                     <div class="card-body">
                         <div class="tab-content" id="v-pills-tabContent">
                             @foreach($roles as $key => $role)
-                                <div class="tab-pane fade  @if ($key === 0) 'show active' @endif" id="{{$role->name}}" role="tabpanel" aria-labelledby="#v-pills-{{$role->name}}">
+                                <div class="tab-pane fade  @if ($key === 0) 'show active' @endif" id="{{$role->name}}"
+                                     role="tabpanel" aria-labelledby="#v-pills-{{$role->name}}">
                                     @if($role->name === \App\Constants\Roles::SUPER_ADMIN)
-                                        <div class="jumbotron">
+                                        <div class="jumbotron bg-success">
                                             <h4>{{\App\Constants\Roles::SUPER_ADMIN}}</h4>
                                             <p class="lead">{{trans('User has super admin permissions')}}</p>
                                         </div>
@@ -64,9 +65,9 @@
                                             <ul class="list-group overflow-auto" style="max-height: 50vh">
                                                 @foreach ($permissions as $permission)
                                                     <li class="list-group-item-action text-right">
-                                                        <label for="perm{{$permission->id}}">{{$permission->name}}</label>
+                                                        <label for="permission{{$role->name . $permission->id}}">{{$permission->name}}</label>
                                                         <input class="custom-checkbox ml-4 mr-2" type="checkbox"
-                                                               id="perm{{$permission->id}}" name="permissions[]" value="{{$permission->id}}"
+                                                               id="permission{{$role->name . $permission->id}}" name="permissions[]" value="{{$permission->id}}"
                                                                @if($role->hasDirectPermission($permission->name)) checked @endif>
                                                     </li>
                                                 @endforeach

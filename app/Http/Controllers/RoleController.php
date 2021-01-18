@@ -47,7 +47,7 @@ class RoleController extends Controller
         $this->roles->store($request);
 
         return redirect(route('roles.index'))
-            ->with('success', trans('resource.success'));
+            ->with('success', trans('resources.created'));
     }
 
 
