@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'main'])->name('dashboard');
     Route::resource('roles', RoleController::class)->except(['edit', 'create', 'show']);
+    Route::resource('users', UserController::class);
 });
