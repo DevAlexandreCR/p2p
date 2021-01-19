@@ -60,6 +60,6 @@ class RoleRepository implements RoleInterface
      */
     public function destroy(Model $model)
     {
-        return $model->forceDelete();
+        return $this->role::destroy($model->id);
     }
 }
