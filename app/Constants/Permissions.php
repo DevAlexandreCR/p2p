@@ -9,6 +9,9 @@ class Permissions extends Enum
     //users
     public const VIEW_DASHBOARD = 'view dashboard';
 
+    //permissions
+    public const EDIT_PERMISSIONS = 'edit permissions';
+
     //users
     public const VIEW_USERS = 'view users';
     public const EDIT_USERS = 'edit users';

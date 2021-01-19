@@ -30,7 +30,7 @@ class UserRepository implements UserInterface
      */
     public function find(int $id)
     {
-        // TODO: Implement find() method.
+        return $this->user::find($id);
     }
 
     /**
@@ -49,7 +49,7 @@ class UserRepository implements UserInterface
      */
     public function update(Request $request, Model $model)
     {
-        // TODO: Implement update() method.
+        return $model->update($request->all());
     }
 
     /**
@@ -58,6 +58,23 @@ class UserRepository implements UserInterface
      */
     public function destroy(Model $model)
     {
-        // TODO: Implement destroy() method.
+        return $this->user::destroy($model->id);
+    }
+
+    /**
+     * Update user permissions and roles
+     * @param Request $request
+     * @param User $user
+     * @return void
+     */
+    public function updatePermissions(Request $request, User $user)
+    {
+        if (key_exists('permissions', $request->all())) {
+            $user->syncPermissions($request->get('permissions'));
+        }
+
+        if (key_exists('roles', $request->all())) {
+            $user->syncRoles($request->get('roles'));
+        }
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\Permissions;
 
 use App\Constants\Permissions;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows(Permissions::CREATE_USERS, $this->user());
+        return Gate::allows(Permissions::EDIT_PERMISSIONS, $this->user());
     }
 
     /**
@@ -26,10 +26,10 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'             => ['required', 'string'],
-            'email'            => ['required', 'email', 'unique:users,email'],
-            'password'         => ['required', 'string'],
-            'password-confirm' => ['required', 'string', 'same:password']
+            'permissions'   => ['array'],
+            'permissions.*' => ['integer', 'exists:permissions,id'],
+            'roles'         => ['array'],
+            'roles.*'       => ['integer', 'exists:roles,id']
         ];
     }
 }

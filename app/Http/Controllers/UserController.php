@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Users\StoreRequest;
+use App\Http\Requests\Users\UpdateRequest;
 use App\Interfaces\UserInterface;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -70,36 +69,31 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param UpdateRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->users->update($request, $user);
+
+        return redirect(route('users.show', $user))
+            ->with('success', trans('resources.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        $this->users->destroy($user);
+
+        return redirect(route('users.index'))
+            ->with('success', trans('resources.removed'));
     }
 }

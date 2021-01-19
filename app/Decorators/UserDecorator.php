@@ -3,6 +3,7 @@
 namespace App\Decorators;
 
 use App\Interfaces\UserInterface;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -54,7 +55,9 @@ class UserDecorator implements UserInterface
      */
     public function update(Request $request, Model $model)
     {
-        // TODO: Implement update() method.
+        $this->userRepository->update($request, $model);
+
+        return Cache::tags('users')->flush();
     }
 
     /**
@@ -63,6 +66,21 @@ class UserDecorator implements UserInterface
      */
     public function destroy(Model $model)
     {
-        // TODO: Implement destroy() method.
+        $this->userRepository->destroy($model);
+
+        return Cache::tags('users')->flush();
+    }
+
+    /**
+     * Update user permissions and roles
+     * @param Request $request
+     * @param User $user
+     * @return void
+     */
+    public function updatePermissions(Request $request, User $user)
+    {
+        $this->userRepository->updatePermissions($request, $user);
+
+        Cache::forget(config('permission.cache.key'));
     }
 }
