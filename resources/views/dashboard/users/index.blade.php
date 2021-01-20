@@ -1,5 +1,5 @@
-@extends('layouts.app')
+@extends('dashboard.dashboard')
 
-@section('content')
+@section('main')
     {{$users}}
 @endsection

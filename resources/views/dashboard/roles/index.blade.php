@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('dashboard.dashboard')
 
-@section('content')
+@section('main')
     <div class="container">
         <div class="container py-4">
-            <button type="button" data-toggle="modal" data-target="#addRole" class="btn btn-dark">{{trans('Add role')}}</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#addRole" class="btn btn-dark">{{trans('Add role')}}</button>
         </div>
         <div class="row">
             <div class="col-md-3">
