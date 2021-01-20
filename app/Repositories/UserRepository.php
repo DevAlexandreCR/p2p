@@ -21,7 +21,7 @@ class UserRepository implements UserInterface
      */
     public function all()
     {
-        return $this->user::all('name', 'email', 'enabled');
+        return $this->user::select('id', 'name', 'email', 'enabled')->paginate(20);
     }
 
     /**
@@ -30,7 +30,7 @@ class UserRepository implements UserInterface
      */
     public function find(int $id)
     {
-        return $this->user::find($id);
+        return $this->user::select('id', 'name', 'enabled', 'email')->whereId($id);
     }
 
     /**

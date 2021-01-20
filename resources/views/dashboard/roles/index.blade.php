@@ -74,7 +74,7 @@
                                                     </li>
                                                 @endforeach
                                             </ul>
-                                            <button type="submit" class="btn w-100 mt-2 btn-success text-white">{{trans('roles.update')}}</button>
+                                            <button type="submit" class="btn w-100 mt-2 btn-success">{{trans('roles.update')}}</button>
                                         </form>
                                     @endif
                                 </div>

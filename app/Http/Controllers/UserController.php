@@ -79,8 +79,7 @@ class UserController extends Controller
     {
         $this->users->update($request, $user);
 
-        return redirect(route('users.show', $user))
-            ->with('success', trans('resources.updated'));
+        return back()->with('success', trans('resources.updated'));
     }
 
     /**
