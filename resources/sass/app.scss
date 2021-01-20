@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+//bootstrap-icons
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
 //custom components
 @import "./custom/sidebar";
 @import "toastr";
