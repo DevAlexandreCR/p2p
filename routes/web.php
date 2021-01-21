@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'main'])->name('dashboard');
     Route::resource('roles', RoleController::class)->except(['edit', 'create', 'show']);
     Route::resource('users', UserController::class)->except('edit');
+    Route::resource('products', ProductController::class)->except('edit');
     Route::put('users/{user}/update_permissions', [PermissionController::class, 'update'])
         ->name('permissions.update');
 });

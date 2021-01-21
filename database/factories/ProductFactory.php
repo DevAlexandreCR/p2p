@@ -19,10 +19,15 @@ class ProductFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->firstName,
+            'reference' => $this->faker->numerify('#####'),
+            'description' => $this->faker->sentence(),
+            'stock' => $this->faker->numberBetween(1,5),
+            'price' => $this->faker->numberBetween(10000, 500000),
+            'image' => $this->faker->imageUrl()
         ];
     }
 }
