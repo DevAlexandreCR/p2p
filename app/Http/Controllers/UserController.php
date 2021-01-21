@@ -29,7 +29,7 @@ class UserController extends Controller
     public function index(): View
     {
         return view('dashboard.users.index', [
-            'users' => $this->users->all()
+            'users' => $this->users->query(request())
         ]);
     }
 

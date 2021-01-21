@@ -5,17 +5,34 @@ namespace App\Decorators;
 use App\Interfaces\UserInterface;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Traits\QueryToString;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class UserDecorator implements UserInterface
 {
+
+    use QueryToString;
+
     private $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function query(Request $request)
+    {
+        $query = $this->convertQueryToString($request);
+
+        return Cache::tags('users')->rememberForever($query, function () use($request){
+            return $this->userRepository->query($request);
+        });
     }
 
     /**
@@ -34,7 +51,10 @@ class UserDecorator implements UserInterface
      */
     public function find(int $id)
     {
-        // TODO: Implement find() method.
+        return Cache::tags('users')->rememberForever('id', function () use ($id) {
+            return $this->userRepository->find($id);
+        });
+
     }
 
     /**

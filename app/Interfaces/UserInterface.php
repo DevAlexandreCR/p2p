@@ -15,4 +15,10 @@ interface UserInterface extends BaseRepositoryInterface
      * @return mixed
      */
     public function updatePermissions(Request $request, User $user);
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function query(Request $request);
 }

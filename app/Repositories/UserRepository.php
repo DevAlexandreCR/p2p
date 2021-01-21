@@ -17,11 +17,20 @@ class UserRepository implements UserInterface
     }
 
     /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function query(Request $request)
+    {
+        return $this->user::select('id', 'name', 'email', 'enabled')->paginate();
+    }
+
+    /**
      * @return mixed
      */
     public function all()
     {
-        return $this->user::select('id', 'name', 'email', 'enabled')->paginate(20);
+        return $this->user::select('id', 'name', 'email', 'enabled')->paginate();
     }
 
     /**
@@ -69,8 +78,7 @@ class UserRepository implements UserInterface
      */
     public function updatePermissions(Request $request, User $user)
     {
-            $user->syncPermissions($request->get('permissions'));
-
+        $user->syncPermissions($request->get('permissions'));
 
         if (key_exists('roles', $request->all())) {
             $user->syncRoles($request->get('roles'));
