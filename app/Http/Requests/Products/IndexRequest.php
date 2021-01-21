@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\Products;
 
 use App\Constants\Permissions;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -16,7 +15,7 @@ class IndexRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows(Permissions::VIEW_USERS, User::class);
+        return Gate::allows(Permissions::VIEW_PRODUCTS);
     }
 
     /**
@@ -27,7 +26,8 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => ['string', 'nullable', 'max: 50'],
+            'name' => ['string', 'max:30', 'nullable'],
+            'reference' => ['string', 'max:10', 'nullable']
         ];
     }
 }
