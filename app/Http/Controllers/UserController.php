@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Users\IndexRequest;
 use App\Http\Requests\Users\StoreRequest;
 use App\Http\Requests\Users\UpdateRequest;
 use App\Interfaces\PermissionInterface;
@@ -21,15 +22,17 @@ class UserController extends Controller
         $this->authorizeResource(User::class);
         $this->users = $users;
     }
+
     /**
      * Display a listing of the resource.
      *
+     * @param IndexRequest $request
      * @return View
      */
-    public function index(): View
+    public function index(IndexRequest $request): View
     {
         return view('dashboard.users.index', [
-            'users' => $this->users->query(request())
+            'users' => $this->users->query($request)
         ]);
     }
 

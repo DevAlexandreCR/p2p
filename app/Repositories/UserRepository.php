@@ -22,7 +22,7 @@ class UserRepository implements UserInterface
      */
     public function query(Request $request)
     {
-        return $this->user::select('id', 'name', 'email', 'enabled')->paginate();
+        return $this->user->search($request->get('search'))->paginate();
     }
 
     /**
