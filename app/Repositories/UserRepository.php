@@ -69,9 +69,8 @@ class UserRepository implements UserInterface
      */
     public function updatePermissions(Request $request, User $user)
     {
-        if (key_exists('permissions', $request->all())) {
             $user->syncPermissions($request->get('permissions'));
-        }
+
 
         if (key_exists('roles', $request->all())) {
             $user->syncRoles($request->get('roles'));

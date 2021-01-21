@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name'    => ['string'],
-            'email'   => ['email', 'unique:users,email'],
+            'email'   => ['email', 'unique:users,email,'. $this->user()->id],
             'enabled' => ['boolean'],
         ];
     }
