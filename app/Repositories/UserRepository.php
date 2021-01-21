@@ -17,11 +17,20 @@ class UserRepository implements UserInterface
     }
 
     /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function query(Request $request)
+    {
+        return $this->user->search($request->get('search'))->paginate();
+    }
+
+    /**
      * @return mixed
      */
     public function all()
     {
-        return $this->user::all('name', 'email', 'enabled');
+        return $this->user::select('id', 'name', 'email', 'enabled')->paginate();
     }
 
     /**
@@ -30,7 +39,7 @@ class UserRepository implements UserInterface
      */
     public function find(int $id)
     {
-        return $this->user::find($id);
+        return $this->user::select('id', 'name', 'enabled', 'email')->whereId($id);
     }
 
     /**
@@ -69,9 +78,7 @@ class UserRepository implements UserInterface
      */
     public function updatePermissions(Request $request, User $user)
     {
-        if (key_exists('permissions', $request->all())) {
-            $user->syncPermissions($request->get('permissions'));
-        }
+        $user->syncPermissions($request->get('permissions'));
 
         if (key_exists('roles', $request->all())) {
             $user->syncRoles($request->get('roles'));

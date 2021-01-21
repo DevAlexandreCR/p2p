@@ -3,10 +3,11 @@
 namespace App\Http\Requests\Users;
 
 use App\Constants\Permissions;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class UpdateRequest extends FormRequest
+class IndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +16,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows(Permissions::EDIT_USERS, $this->user());
+        return Gate::allows(Permissions::VIEW_USERS, User::class);
     }
 
     /**
@@ -26,9 +27,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => ['string'],
-            'email'   => ['email', 'unique:users,email,' . $this->route('user')->id],
-            'enabled' => ['boolean'],
+            'search' => ['string', 'nullable', 'max: 50'],
         ];
     }
 }

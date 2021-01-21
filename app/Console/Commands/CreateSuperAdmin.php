@@ -56,7 +56,7 @@ class CreateSuperAdmin extends Command
                     'name'      => $name,
                     'email'     => $email,
                     'password'  => Hash::make($password),
-                    'is_active' => true,
+                    'enabled' => true,
                 ]);
                 $admin->assignRole(Roles::SUPER_ADMIN);
                 $this->info(trans('users.create_admin.ok'));

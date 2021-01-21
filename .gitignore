@@ -13,3 +13,6 @@ npm-debug.log
 yarn-error.log
 /.idea/
 /.editorconfig
+/public/css/
+/public/fonts/
+/public/js/

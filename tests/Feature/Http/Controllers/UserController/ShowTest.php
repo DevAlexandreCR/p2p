@@ -21,7 +21,9 @@ class ShowTest extends BaseControllerTest
         $response
             ->assertStatus(200)
             ->assertViewIs('dashboard.users.show')
-            ->assertViewHas('user');
+            ->assertViewHas('user')
+            ->assertViewHas('roles')
+            ->assertViewHas('permissions');
     }
 
     /**

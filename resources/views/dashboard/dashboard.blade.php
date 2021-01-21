@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <a class="btn btn-light ml-4" href="{{route('roles.index')}}">{{trans('Roles')}}</a>
-    <a class="btn btn-light ml-4" href="{{route('users.index')}}">{{trans('Users')}}</a>
+    <div class="d-flex" id="wrapper">
+        @include('dashboard.sidebar')
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <button-toggle-component></button-toggle-component>
+            </nav>
+            <div class="container-fluid">
+                @yield('main')
+            </div>
+        </div>
+    </div>
 @endsection

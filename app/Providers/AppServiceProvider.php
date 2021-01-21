@@ -8,6 +8,7 @@ use App\Decorators\UserDecorator;
 use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+
         $this->app->bind(RoleInterface::class, RoleDecorator::class);
         $this->app->bind(PermissionInterface::class, PermissionsDecorator::class);
         $this->app->bind(UserInterface::class, UserDecorator::class);

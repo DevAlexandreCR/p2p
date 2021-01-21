@@ -38,7 +38,6 @@ class UpdateTest extends BaseControllerTest
 
         $response
             ->assertStatus(302)
-            ->assertRedirect(route('users.show', $this->user->id))
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('users', [
