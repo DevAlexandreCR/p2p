@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\ProductController;
-
 
 use App\Constants\Permissions;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -10,7 +8,6 @@ use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class StoreTest extends BaseControllerTest
 {
-
     use WithFaker;
 
     /**

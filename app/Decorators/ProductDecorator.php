@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Decorators;
-
 
 use App\Interfaces\ProductInterface;
 use App\Models\Product;
@@ -13,7 +11,6 @@ use Illuminate\Support\Facades\Cache;
 
 class ProductDecorator implements ProductInterface
 {
-
     use QueryToString;
 
     private $products;
@@ -32,7 +29,7 @@ class ProductDecorator implements ProductInterface
     {
         $query = $this->convertQueryToString($request);
 
-        return Cache::tags('products')->rememberForever($query, function () use($request){
+        return Cache::tags('products')->rememberForever($query, function () use ($request) {
             return $this->products
                 ->name($request->get('name'))
                 ->reference($request->get('reference'))
@@ -56,7 +53,7 @@ class ProductDecorator implements ProductInterface
      */
     public function find(int $id)
     {
-        return Cache::tags('products')->rememberForever($id, function () use ($id){
+        return Cache::tags('products')->rememberForever($id, function () use ($id) {
             return $this->products::findOrFail($id);
         });
     }

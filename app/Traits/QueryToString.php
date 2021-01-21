@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Traits;
-
 
 use Illuminate\Http\Request;
 
@@ -12,7 +10,7 @@ trait QueryToString
     {
         $string = 'query.';
         $arrayKeys = $request->all();
-        foreach (array_keys($arrayKeys) as $key){
+        foreach (array_keys($arrayKeys) as $key) {
             $string .= $key . '=' . $request->get($key);
         }
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\ProductController;
-
 
 use App\Constants\Permissions;
 use Tests\Feature\Http\Controllers\BaseControllerTest;

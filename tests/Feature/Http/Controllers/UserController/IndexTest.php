@@ -9,7 +9,6 @@ use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class IndexTest extends BaseControllerTest
 {
-
     use WithFaker;
 
     public function testAnUserWithPermissionsCanSearchUsers()

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\ProductController;
-
 
 use App\Constants\Permissions;
 use App\Models\Product;
@@ -11,7 +9,6 @@ use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class IndexTest extends BaseControllerTest
 {
-
     use WithFaker;
 
     /**

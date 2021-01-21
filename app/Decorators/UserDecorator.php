@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Cache;
 
 class UserDecorator implements UserInterface
 {
-
     use QueryToString;
 
     private $userRepository;
@@ -30,7 +29,7 @@ class UserDecorator implements UserInterface
     {
         $query = $this->convertQueryToString($request);
 
-        return Cache::tags('users')->rememberForever($query, function () use($request){
+        return Cache::tags('users')->rememberForever($query, function () use ($request) {
             return $this->userRepository->query($request);
         });
     }
@@ -54,7 +53,6 @@ class UserDecorator implements UserInterface
         return Cache::tags('users')->rememberForever('id', function () use ($id) {
             return $this->userRepository->find($id);
         });
-
     }
 
     /**
