@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
         return [
             'name'        => ['string', 'max:30', 'min:2'],
             'description' => ['string', 'min:10', 'max:255'],
-            'reference'   => ['alpha_num', 'min:4', 'max:6', 'unique:products,reference'],
+            'reference'   => ['alpha_num', 'min:4', 'max:6', 'unique:products,reference,'. $this->route('product')->id],
             'stock'       => ['integer', 'min:1'],
             'price'       => ['numeric', 'min:0.1'],
         ];
