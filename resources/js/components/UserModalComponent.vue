@@ -32,9 +32,9 @@
 
 <script>
 export default {
-  name: "UserModalComponent",
+  name: 'UserModalComponent',
 
-  data() {
+  data () {
     return {
       user: {
         name: '',
@@ -44,11 +44,11 @@ export default {
     }
   },
 
-  mounted() {
-    let myModalEl = document.getElementById('user-modal')
+  mounted () {
+    const myModalEl = document.getElementById('user-modal')
 
     myModalEl.addEventListener('show.bs.modal', function (event) {
-      let button = event.relatedTarget
+      const button = event.relatedTarget
       this.user = JSON.parse(button.getAttribute('data-bs-user'))
       myModalEl.querySelector('.modal-body td[id="userName"]').textContent = this.user.name
       myModalEl.querySelector('.modal-body td[id="userEmail"]').textContent = this.user.email

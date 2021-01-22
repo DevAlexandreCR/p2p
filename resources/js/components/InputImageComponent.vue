@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "input-image-component",
+  name: 'input-image-component',
 
   props: {
     name: {
@@ -25,10 +25,10 @@ export default {
   },
 
   methods: {
-    imgPreview(e) {
+    imgPreview (e) {
       const file = e.target.files[0]
-      let img = document.getElementById(this.imgId)
-      img.src = URL.createObjectURL(file);
+      const img = document.getElementById(this.imgId)
+      img.src = URL.createObjectURL(file)
     }
   }
 }

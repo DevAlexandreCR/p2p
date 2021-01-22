@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  name: "ButtonToggleComponent",
+  name: 'ButtonToggleComponent',
   methods: {
-    toggle(e) {
-        e.preventDefault();
-        document.getElementById('wrapper').classList.toggle('toggled')
+    toggle (e) {
+      e.preventDefault()
+      document.getElementById('wrapper').classList.toggle('toggled')
     }
   }
 }

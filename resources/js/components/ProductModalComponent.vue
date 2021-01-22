@@ -40,25 +40,25 @@
 
 <script>
 export default {
-  name: "ProductModalComponent",
+  name: 'ProductModalComponent',
 
-  data() {
+  data () {
     return {
       product: {
         name: '',
         reference: '',
         description: '',
         stock: 0,
-        price: 0,
+        price: 0
       }
     }
   },
 
-  mounted() {
-    let myModalEl = document.getElementById('product-modal')
+  mounted () {
+    const myModalEl = document.getElementById('product-modal')
 
     myModalEl.addEventListener('show.bs.modal', function (event) {
-      let button = event.relatedTarget
+      const button = event.relatedTarget
       this.product = JSON.parse(button.getAttribute('data-bs-product'))
       myModalEl.querySelector('.modal-body td[id="productName"]').textContent = this.product.name
       myModalEl.querySelector('.modal-body td[id="productReference"]').textContent = this.product.reference

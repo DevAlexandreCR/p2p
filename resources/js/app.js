@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import './bootstrap'
 import ToastComponent from './components/ToastComponent'
-import ButtonToggleComponent from "./components/ButtonToggleComponent";
-import InputImageComponent from "./components/InputImageComponent";
-import ProductModalComponent from "./components/ProductModalComponent";
-import UserModalComponent from "./components/UserModalComponent";
+import ButtonToggleComponent from './components/ButtonToggleComponent'
+import InputImageComponent from './components/InputImageComponent'
+import ProductModalComponent from './components/ProductModalComponent'
+import UserModalComponent from './components/UserModalComponent'
 
 window.Vue = Vue
 
