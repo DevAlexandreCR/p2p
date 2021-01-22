@@ -31,6 +31,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
  */
 window.toastr = require('toastr')
 
+window.bootstrap = require('bootstrap')
+
 document.addEventListener('submit', function (e) {
   const input = $(e.target).find('button[type=submit]')
   input.attr('disabled', true)

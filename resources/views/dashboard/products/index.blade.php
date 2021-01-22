@@ -46,7 +46,11 @@
                             <td>{{ $product->stock }}</td>
                             <td class="text-center" style="border-left: groove">
                                 <div class="d-inline">
-                                    <a type="button" class="btn btn-link pt-2 mr-4 btn-sm"
+                                    <button class="btn btn-light btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#product-modal" data-bs-product="{{ $product }}">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </button>
+                                    <a type="button" class="btn btn-light mr-4 btn-sm"
                                        data-toggle="tooltip"
                                        data-placement="top"
                                        title="{{trans('actions.view')}}"
@@ -55,7 +59,7 @@
                                     </a>
                                     <form class="d-inline" action="{{route('products.destroy', $product->id)}}" method="POST">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-link btn-sm text-black-50 p-0"
+                                        <button type="submit" class="btn btn-light btn-sm text-danger"
                                                 data-bs-toggle="tooltip"
                                                 data-placement="top">
                                             <i class="bi bi-trash-fill"></i>
@@ -78,5 +82,6 @@
                 </div>
             </div>
         </div>
+        <product-modal-component></product-modal-component>
     </div>
 @endsection
