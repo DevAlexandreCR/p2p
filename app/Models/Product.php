@@ -21,13 +21,13 @@ class Product extends Model
 
     public function scopeName(Builder $query, ?string $name): Builder
     {
-        return $query->select('name', 'reference', 'stock', 'description', 'price', 'image')
+        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price', 'image')
             ->where('name', 'like', '%' . $name . '%');
     }
 
     public function scopeReference(Builder $query, ?string $reference): Builder
     {
-        return $query->select('name', 'reference', 'stock', 'description', 'price', 'image')
+        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price', 'image')
             ->where('reference', 'like', '%' . $reference . '%');
     }
 }

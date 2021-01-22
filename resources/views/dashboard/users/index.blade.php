@@ -48,17 +48,21 @@
                             @endif
                             <td class="text-center" style="border-left: groove">
                                 <div class="d-inline">
-                                    <a type="button" class="btn btn-link pt-2 mr-4 btn-sm"
+                                    <button class="btn btn-light btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#user-modal" data-bs-user="{{ $user }}">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </button>
+                                    <a type="button" class="btn btn-light mr-4 btn-sm"
                                        data-toggle="tooltip"
                                        data-placement="top"
                                        title="{{trans('actions.view')}}"
                                        href="{{route('users.show', $user->id)}}">
-                                        <i class="bi bi-eye-fill text-primary"></i>
+                                        <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
                                     <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST">
                                         @csrf @method('PUT')
                                         <input type="hidden" name="enabled" value="@if($user->enabled) {{0}}@else {{1}} @endif">
-                                        <button type="submit" class="btn btn-link btn-sm text-black-50 p-0"
+                                        <button type="submit" class="btn btn-light btn-sm"
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="@if($user->enabled) {{trans('actions.disable')}} @else{{trans('actions.enable')}} @endif">
@@ -77,9 +81,16 @@
                     </tbody>
                 </table>
             </div>
-            <div class="container text-end pe-5">
-                {{$users->onEachSide(5)->links()}}
+            <div class="row row-cols-2 text-end pe-5">
+                <div class="col-sm-6">{{$users->onEachSide(5)->links()}}</div>
+                <div class="col-sm-6">
+                    <div class="card-title">
+                        {{trans_choice('users.user', $users->total(), ['user_count'=> $users->total()])}}
+                        <a class="btn btn-link" href="{{route('users.index')}}">{{trans('actions.view_all')}}</a>
+                    </div>
+                </div>
             </div>
         </div>
+        <user-modal-component></user-modal-component>
     </div>
 @endsection
