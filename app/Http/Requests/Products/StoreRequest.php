@@ -31,6 +31,7 @@ class StoreRequest extends FormRequest
             'reference'   => ['required', 'alpha_num', 'min:4', 'max:6', 'unique:products,reference'],
             'stock'       => ['required', 'integer', 'min:1'],
             'price'       => ['required', 'numeric', 'min:0.1'],
+            'image'       => ['required', 'image']
         ];
     }
 }

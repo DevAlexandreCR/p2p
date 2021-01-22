@@ -4,6 +4,8 @@ namespace Tests\Feature\Http\Controllers\ProductController;
 
 use App\Constants\Permissions;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class StoreTest extends BaseControllerTest
@@ -24,7 +26,8 @@ class StoreTest extends BaseControllerTest
                 'description' => $description = $this->faker->firstName,
                 'reference' => $reference = $this->faker->numerify('###'),
                 'price' => $price = 0,
-                'stock' => $stock = 0
+                'stock' => $stock = 0,
+                'image' => 'image'
             ]);
 
         $response
@@ -35,7 +38,8 @@ class StoreTest extends BaseControllerTest
                 'description',
                 'reference',
                 'price',
-                'stock'
+                'stock',
+                'image'
             ]);
 
         $this->assertDatabaseMissing('products', [
@@ -54,6 +58,8 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
+        Storage::fake('images');
+
         $this->admin->givePermissionTo(Permissions::CREATE_PRODUCTS);
 
         $response = $this->actingAs($this->admin)->post(route('products.store'), [
@@ -61,7 +67,8 @@ class StoreTest extends BaseControllerTest
             'description' => $description = $this->faker->sentences(3, true),
             'reference' => $reference = $this->faker->numerify('#####'),
             'price' => $price = 20000,
-            'stock' => $stock = 5
+            'stock' => $stock = 5,
+            'image' => UploadedFile::fake()->image('image.jpg')
         ]);
 
         $response
@@ -74,8 +81,11 @@ class StoreTest extends BaseControllerTest
             'description' => $description,
             'reference' => $reference,
             'price' => $price,
-            'stock' => $stock
+            'stock' => $stock,
+            'image' => 'image.jpg'
         ]);
+
+        Storage::disk('images')->assertExists('image.jpg');
     }
 
     /**
