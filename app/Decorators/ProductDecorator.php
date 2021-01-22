@@ -2,12 +2,14 @@
 
 namespace App\Decorators;
 
+use App\Actions\ImageStorageAction;
 use App\Interfaces\ProductInterface;
 use App\Models\Product;
 use App\Traits\QueryToString;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use phpDocumentor\Reflection\File;
 
 class ProductDecorator implements ProductInterface
 {
@@ -64,7 +66,9 @@ class ProductDecorator implements ProductInterface
      */
     public function store(Request $request)
     {
-        $this->products::create($request->all());
+        $product = $this->products::create($request->all());
+
+        ImageStorageAction::execute($request->file('image'), $product);
 
         return Cache::tags('products')->flush();
     }
@@ -77,6 +81,8 @@ class ProductDecorator implements ProductInterface
     public function update(Request $request, Model $model)
     {
         $model->update($request->all());
+
+        ImageStorageAction::execute($request->file('image'), $model);
 
         return Cache::tags('products')->flush();
     }

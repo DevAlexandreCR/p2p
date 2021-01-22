@@ -38,6 +38,8 @@ document.addEventListener('submit', function (e) {
   input.attr('disabled', true)
 })
 
+window.imagePath = process.env.MIX_IMAGE_PATH
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

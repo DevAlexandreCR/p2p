@@ -3,7 +3,7 @@
   <div class="modal fade" id="product-modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="label-product-modal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <img src="/images/default.png" class="card-img-top img-product-detail" alt="...">
+        <img :src="imagePath + 'default.png'" class="card-img-top img-product-detail" alt="...">
         <div class="modal-body">
           <table class="table table-borderless">
             <thead>
@@ -65,7 +65,7 @@ export default {
       myModalEl.querySelector('.modal-body td[id="productDescription"]').textContent = this.product.description
       myModalEl.querySelector('.modal-body td[id="productStock"]').textContent = this.product.stock
       myModalEl.querySelector('.modal-body td[id="productPrice"]').textContent = this.product.price
-      myModalEl.querySelector('.modal-content img').src = this.product.image
+      myModalEl.querySelector('.modal-content img').src = imagePath + this.product.image
     })
   }
 }

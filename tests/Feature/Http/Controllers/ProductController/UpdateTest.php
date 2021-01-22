@@ -5,6 +5,8 @@ namespace Tests\Feature\Http\Controllers\ProductController;
 use App\Constants\Permissions;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class UpdateTest extends BaseControllerTest
@@ -26,7 +28,8 @@ class UpdateTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $this->withoutExceptionHandling();
+        Storage::fake('images');
+
         $this->admin->givePermissionTo(Permissions::EDIT_PRODUCTS);
 
         $response = $this->actingAs($this->admin)->put(route('products.update', $this->product->id), [
@@ -34,7 +37,8 @@ class UpdateTest extends BaseControllerTest
             'description' => $description = $this->faker->sentences(3, true),
             'reference' => $reference = $this->faker->numerify('#####'),
             'price' => $price = 20000,
-            'stock' => $stock = 5
+            'stock' => $stock = 5,
+            'image' => UploadedFile::fake()->image('imageUpdated.jpg')
         ]);
 
         $response
@@ -46,8 +50,11 @@ class UpdateTest extends BaseControllerTest
             'description' => $description,
             'reference' => $reference,
             'price' => $price,
-            'stock' => $stock
+            'stock' => $stock,
+            'image' => 'imageUpdated.jpg'
         ]);
+
+        Storage::disk('images')->assertExists('imageUpdated.jpg');
     }
 
     /**

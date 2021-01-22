@@ -9,7 +9,6 @@ use App\Http\Requests\Products\UpdateRequest;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
