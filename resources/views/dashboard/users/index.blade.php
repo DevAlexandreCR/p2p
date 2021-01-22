@@ -77,8 +77,14 @@
                     </tbody>
                 </table>
             </div>
-            <div class="container text-end pe-5">
-                {{$users->onEachSide(5)->links()}}
+            <div class="row row-cols-2 text-end pe-5">
+                <div class="col-sm-6">{{$users->onEachSide(5)->links()}}</div>
+                <div class="col-sm-6">
+                    <div class="card-title">
+                        {{trans_choice('users.user', $users->total(), ['user_count'=> $users->total()])}}
+                        <a class="btn btn-link" href="{{route('users.index')}}">{{trans('actions.view_all')}}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
