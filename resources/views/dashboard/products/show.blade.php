@@ -8,7 +8,7 @@
                 @csrf @method('PUT')
                 <div class="card-body">
                     <div class="row">
-                        <img src="{{$product->image}}" class="img-fluid rounded" id="image-product" alt="image" height="h-100">
+                        <img src="{{$product->image}}" class="img-fluid rounded img-product-detail" id="image-product" alt="image" height="h-100">
                         <input-image-component :name="'image'" :img-id="'image-product'"></input-image-component>
                     </div>
                     <div class="row">

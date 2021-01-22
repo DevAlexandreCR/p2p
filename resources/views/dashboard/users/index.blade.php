@@ -53,7 +53,7 @@
                                        data-placement="top"
                                        title="{{trans('actions.view')}}"
                                        href="{{route('users.show', $user->id)}}">
-                                        <i class="bi bi-eye-fill text-primary"></i>
+                                        <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
                                     <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST">
                                         @csrf @method('PUT')

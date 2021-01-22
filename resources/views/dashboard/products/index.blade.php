@@ -51,7 +51,7 @@
                                        data-placement="top"
                                        title="{{trans('actions.view')}}"
                                        href="{{route('products.show', $product->id)}}">
-                                        <i class="bi bi-eye-fill text-primary"></i>
+                                        <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
                                     <form class="d-inline" action="{{route('products.destroy', $product->id)}}" method="POST">
                                         @csrf @method('DELETE')
