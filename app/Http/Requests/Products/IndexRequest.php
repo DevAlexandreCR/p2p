@@ -15,7 +15,7 @@ class IndexRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows(Permissions::VIEW_PRODUCTS);
+        return true;
     }
 
     /**
