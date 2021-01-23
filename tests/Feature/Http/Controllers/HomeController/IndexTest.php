@@ -32,7 +32,7 @@ class IndexTest extends TestCase
     public function testAnUserCanViewAProductDetail()
     {
         $product = Product::factory()->create();
-        $response = $this->get(route('home.product', $product->slug));
+        $response = $this->get(route('home.show', $product->slug));
 
         $response
             ->assertStatus(200)

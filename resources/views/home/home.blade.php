@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-home
-</div>
+
+    @include('home.product-grid', [
+        'products' => $products
+    ])
+
 @endsection

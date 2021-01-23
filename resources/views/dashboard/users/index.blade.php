@@ -86,7 +86,7 @@
                 <div class="col-sm-6">
                     <div class="card-title">
                         {{trans_choice('users.user', $users->total(), ['user_count'=> $users->total()])}}
-                        <a class="btn btn-link" href="{{route('users.index')}}">{{trans('actions.view_all')}}</a>
+                        <a class="link" href="{{route('users.index')}}">{{trans('actions.view_all')}}</a>
                     </div>
                 </div>
             </div>
