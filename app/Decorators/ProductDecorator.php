@@ -9,6 +9,7 @@ use App\Traits\QueryToString;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\File;
 
 class ProductDecorator implements ProductInterface
@@ -66,6 +67,9 @@ class ProductDecorator implements ProductInterface
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'slug' => Str::slug($request->get('name'))
+        ]);
         $product = $this->products::create($request->all());
 
         ImageStorageAction::execute($request->file('image'), $product);

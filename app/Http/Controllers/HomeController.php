@@ -2,27 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Decorators\ProductDecorator;
+use App\Http\Requests\Products\IndexRequest;
+use App\Models\Product;
+use Illuminate\Contracts\Support\Renderable;
 
 class HomeController extends Controller
 {
+
+    private $products;
+
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param ProductDecorator $products
      */
-    public function __construct()
+    public function __construct(ProductDecorator $products)
     {
-        $this->middleware('auth');
+        $this->products = $products;
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application home.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @param IndexRequest $request
+     * @return Renderable
      */
-    public function index()
+    public function index(IndexRequest $request): Renderable
     {
-        return view('home');
+        return view('home.home', [
+            'products' => $this->products->query($request)
+        ]);
+    }
+
+    public function show(Product $product): Renderable
+    {
+        return view('home.show', [
+            'product' => $product
+        ]);
     }
 }
