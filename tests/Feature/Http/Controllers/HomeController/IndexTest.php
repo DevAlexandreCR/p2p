@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Http\Controllers\HomeController;
 
+use App\Models\Product;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
@@ -19,7 +20,23 @@ class IndexTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertViewIs('home')
+            ->assertViewIs('home.home')
             ->assertViewHas('products');
+    }
+
+    /**
+     * Test an user can view a product detail
+     *
+     * @return void
+     */
+    public function testAnUserCanViewAProductDetail()
+    {
+        $product = Product::factory()->create();
+        $response = $this->get(route('home.product', $product->slug));
+
+        $response
+            ->assertStatus(200)
+            ->assertViewIs('home.show')
+            ->assertViewHas('product', $product);
     }
 }

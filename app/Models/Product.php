@@ -16,7 +16,8 @@ class Product extends Model
         'description',
         'stock',
         'price',
-        'image'
+        'image',
+        'slug'
     ];
 
     public function scopeName(Builder $query, ?string $name): Builder
