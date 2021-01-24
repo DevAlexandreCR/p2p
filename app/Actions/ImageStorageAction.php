@@ -29,7 +29,7 @@ class ImageStorageAction
     private static function saveImage(UploadedFile $image): string
     {
         $name = $image->getClientOriginalName();
-        $img = Image::make($image)->fit(300, 200)->encode('jpg', 75);
+        $img = Image::make($image)->fit(480, 320)->encode('jpg', 75);
         Storage::disk('images')->put($name, $img);
 
         return $name;
