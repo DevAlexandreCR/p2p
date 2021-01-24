@@ -31,7 +31,7 @@ class HomeController extends Controller
     public function index(IndexRequest $request): Renderable
     {
         return view('home.home', [
-            'products' => $this->products->query($request)
+            'products' => $this->products->query($request)->withPath(route('home'))
         ]);
     }
 

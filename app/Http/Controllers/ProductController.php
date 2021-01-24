@@ -30,7 +30,7 @@ class ProductController extends Controller
     public function index(IndexRequest $request): View
     {
         return view('dashboard.products.index', [
-            'products' => $this->products->query($request)
+            'products' => $this->products->query($request)->withPath(route('products.index'))
         ]);
     }
 
