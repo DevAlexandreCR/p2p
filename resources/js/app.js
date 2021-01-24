@@ -5,6 +5,7 @@ import ButtonToggleComponent from './components/ButtonToggleComponent'
 import InputImageComponent from './components/InputImageComponent'
 import ProductModalComponent from './components/ProductModalComponent'
 import UserModalComponent from './components/UserModalComponent'
+import SelectStockComponent from "./components/SelectStockComponent";
 
 window.Vue = Vue
 
@@ -13,6 +14,7 @@ Vue.component('button-toggle-component', ButtonToggleComponent)
 Vue.component('input-image-component', InputImageComponent)
 Vue.component('product-modal-component', ProductModalComponent)
 Vue.component('user-modal-component', UserModalComponent)
+Vue.component('select-stock-component', SelectStockComponent)
 
 new Vue({
   el: '#app'

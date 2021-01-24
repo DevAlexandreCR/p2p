@@ -23,8 +23,8 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $name = $this->faker->firstName,
-            'reference' => $this->faker->numerify('#####'),
+            'name' => $name = $this->faker->unique()->firstName,
+            'reference' => $this->faker->unique()->numerify('#####'),
             'slug' => Str::slug($name),
             'description' => $this->faker->sentence(),
             'stock' => $this->faker->numberBetween(1,5),

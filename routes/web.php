@@ -21,10 +21,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/{product:slug}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.product');
+Route::get('/{product:slug}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
-    Route::get('/', [App\Http\Controllers\DashboardController::class, 'main'])->name('dashboard');
+    Route::get('/main', [App\Http\Controllers\DashboardController::class, 'main'])->name('dashboard');
     Route::resource('roles', RoleController::class)->except(['edit', 'create', 'show']);
     Route::resource('users', UserController::class)->except('edit');
     Route::resource('products', ProductController::class)->except('edit');

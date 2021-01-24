@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-home
-</div>
+
+    @include('home.banner')
+
+    @include('home.product-grid', [
+        'products' => $products
+    ])
+
 @endsection
