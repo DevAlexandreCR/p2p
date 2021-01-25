@@ -39,9 +39,9 @@ class UserPolicy
      * @param User $model
      * @return mixed
      */
-    public function view(User $user, User $model)
+    public function view(User $user, User $model): bool
     {
-        return $user->hasPermissionTo(Permissions::VIEW_USERS);
+        return $user->hasPermissionTo(Permissions::VIEW_USERS) || $user->id === $model->id;
     }
 
     /**
@@ -62,9 +62,9 @@ class UserPolicy
      * @param User $model
      * @return mixed
      */
-    public function update(User $user, User $model)
+    public function update(User $user, User $model): bool
     {
-        return $user->hasPermissionTo(Permissions::EDIT_USERS);
+        return $user->hasPermissionTo(Permissions::EDIT_USERS) || $user->id === $model->id;
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Constants\Roles;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
+use App\Policies\CartPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
