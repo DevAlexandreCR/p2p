@@ -6,6 +6,7 @@ import InputImageComponent from './components/InputImageComponent'
 import ProductModalComponent from './components/ProductModalComponent'
 import UserModalComponent from './components/UserModalComponent'
 import SelectStockComponent from './components/SelectStockComponent'
+import SelectQuantityComponent from './components/SelectQuantityComponent'
 
 window.Vue = Vue
 
@@ -15,6 +16,7 @@ Vue.component('input-image-component', InputImageComponent)
 Vue.component('product-modal-component', ProductModalComponent)
 Vue.component('user-modal-component', UserModalComponent)
 Vue.component('select-stock-component', SelectStockComponent)
+Vue.component('select-quantity-component', SelectQuantityComponent)
 
 new Vue({
   el: '#app'

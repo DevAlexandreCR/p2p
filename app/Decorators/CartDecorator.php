@@ -25,7 +25,7 @@ class CartDecorator implements CartInterface
      */
     public function update(Request $request, User $user): void
     {
-        $user->cart->products()->attach($request->input('product_id'), [
+        $user->cart->products()->updateExistingPivot($request->input('product_id'), [
             'quantity' => $request->input('quantity')
         ]);
     }
@@ -47,7 +47,6 @@ class CartDecorator implements CartInterface
      */
     public function store(Request $request, User $user)
     {
-        var_dump($request->input('quantity'));
         $productId = $request->input('product_id');
 
         $product = $user->cart->products()->where('product_id', $productId)->first();

@@ -25,4 +25,32 @@ class Cart extends Model
         return $this->belongsToMany(Product::class)
             ->withPivot('quantity');
     }
+
+    /**
+     * return total cart value
+     * @return string
+     */
+    public function getTotalCartAttribute(): string
+    {
+        $total = 0;
+        $this->products()->each(function ($product) use (&$total) {
+            $total += $product->price * $product->pivot->quantity;
+        });
+
+        return number_format($total);
+    }
+
+    /**
+     * return total products into cart
+     * @return int
+     */
+    public function getTotalCartCountAttribute(): int
+    {
+        $total = 0;
+        $this->products()->each(function ($product) use (&$total) {
+            $total += $product->pivot->quantity;
+        });
+
+        return $total;
+    }
 }

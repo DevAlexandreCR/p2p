@@ -6,12 +6,9 @@ use App\Decorators\CartDecorator;
 use App\Http\Requests\Carts\DeleteRequest;
 use App\Http\Requests\Carts\StoreRequest;
 use App\Http\Requests\Carts\UpdateRequest;
-use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
