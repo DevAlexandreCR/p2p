@@ -37,4 +37,13 @@ class Product extends Model
         return $query->select('id', 'name', 'reference', 'stock', 'description', 'price', 'image', 'slug')
             ->where('reference', 'like', '%' . $reference . '%');
     }
+
+    /**
+     * get total price with quantity into cart
+     * @return string
+     */
+    public function getTotalPriceAttribute(): string
+    {
+        return number_format($this->pivot->quantity * $this->price);
+    }
 }

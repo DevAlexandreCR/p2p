@@ -32,7 +32,7 @@
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }}
+                            {{ auth()->user()->name }}
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -53,8 +53,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart.show', auth()->user()) }}">
-                            <i class="bi bi-cart"></i>
-                            <span class="badge bg-danger">{{ 1}}</span>
+                            <i class="bi bi-cart">
+                                <span class="badge bg-danger p-1">{{ auth()->user()->cart->totalCartCount }}</span>
+                            </i>
                         </a>
                     </li>
                 @endguest

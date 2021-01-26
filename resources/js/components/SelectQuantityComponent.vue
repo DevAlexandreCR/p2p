@@ -1,8 +1,8 @@
 <template>
-  <div class="row g-3 align-items-center">
+  <div class="row">
     <div class="col-6"><label for="select-quantity">Quantity:</label></div>
     <div class="col-6">
-      <select class="form-select form-select-sm pe-5" id="select-quantity"
+      <select class="form-select form-select-sm" id="select-quantity"
               aria-label="Select quantity" @change="submit($event)">
         <option v-for="num in stockAvailable" :key="num" v-bind:selected="num === quantitySelected">{{ num }}</option>
       </select>
