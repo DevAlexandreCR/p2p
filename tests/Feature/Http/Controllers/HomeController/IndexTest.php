@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\HomeController;
 
 use App\Models\Product;

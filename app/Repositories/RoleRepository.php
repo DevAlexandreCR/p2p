@@ -40,7 +40,7 @@ class RoleRepository implements RoleInterface
     public function store(Request $request)
     {
         return $this->role::create([
-            'name' => $request->get('name')
+            'name' => $request->input('name')
         ]);
     }
 
@@ -51,7 +51,7 @@ class RoleRepository implements RoleInterface
      */
     public function update(Request $request, Model $model)
     {
-        return $model->syncPermissions($request->get('permissions'));
+        return $model->syncPermissions($request->input('permissions'));
     }
 
     /**

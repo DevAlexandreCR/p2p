@@ -65,7 +65,7 @@ export default {
       myModalEl.querySelector('.modal-body td[id="productDescription"]').textContent = this.product.description
       myModalEl.querySelector('.modal-body td[id="productStock"]').textContent = this.product.stock
       myModalEl.querySelector('.modal-body td[id="productPrice"]').textContent = this.product.price
-      myModalEl.querySelector('.modal-content img').src = imagePath + this.product.image
+      myModalEl.querySelector('.modal-content img').src = window.imagePath + this.product.image
     })
   }
 }

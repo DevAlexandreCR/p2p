@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -30,4 +31,11 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::resource('products', ProductController::class)->except('edit');
     Route::put('users/{user}/update_permissions', [PermissionController::class, 'update'])
         ->name('permissions.update');
+});
+
+Route::middleware('auth')->prefix('user')->group(function() {
+    Route::get('/{user}/cart', [CartController::class, 'show'])->name('cart.show');
+    Route::put('/{user}/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/{user}/cart/delete', [CartController::class, 'destroy'])->name('cart.delete');
+    Route::post('/{user}/cart/store', [CartController::class, 'store'])->name('cart.store');
 });
