@@ -4,12 +4,12 @@
 namespace Tests\Feature\Http\Controllers\CartController;
 
 
+use App\Models\Product;
 use App\Models\User;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
-class ShowTest extends BaseControllerTest
+class StoreTest extends BaseControllerTest
 {
-
     private $user;
 
     protected function setUp(): void
@@ -18,6 +18,7 @@ class ShowTest extends BaseControllerTest
         $this->user = User::factory()->create();
     }
 
+
     /**
      * Test an user without permissions can't execute this action.
      *
@@ -25,11 +26,29 @@ class ShowTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $response = $this->actingAs($this->user)->get(route('cart.show', $this->user->id));
+        $this->withoutExceptionHandling();
+        $product = Product::factory()->create([
+            'stock' => 5
+        ]);
+
+        $product->carts()->attach($this->user->cart->id, [
+            'quantity' => 1
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('cart.store', $this->user->id), [
+            'product_id' =>$product->id,
+            'quantity' => 1
+        ]);
+
         $response
-            ->assertStatus(200)
-            ->assertViewIs('home.users.cart')
-            ->assertViewHas('user');
+            ->assertStatus(302)
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('cart_product', [
+            'cart_id' => $this->user->cart->id,
+            'product_id' => $product->id,
+            'quantity' => 1
+        ]);
     }
 
     /**
@@ -40,7 +59,7 @@ class ShowTest extends BaseControllerTest
     public function testAnUserWithoutPermissionsCannotExecuteThisAction()
     {
         $anotherUser = User::factory()->create();
-        $response = $this->actingAs($this->user)->get(route('cart.show', $anotherUser->id));
+        $response = $this->actingAs($this->user)->post(route('cart.store', $anotherUser->id));
 
         $response
             ->assertStatus(403)
@@ -54,10 +73,10 @@ class ShowTest extends BaseControllerTest
      */
     public function testAnUserUnauthenticatedIsRedirectedToLogin()
     {
-        $response = $this->get(route('cart.show', $this->user->id));
+        $response = $this->post(route('cart.store', $this->user->id));
 
         $response
-            ->assertRedirect(route('login'))
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertRedirect(route('login'));
     }
 }

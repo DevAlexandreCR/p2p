@@ -37,7 +37,7 @@ class UserPolicy
      *
      * @param User $user
      * @param User $model
-     * @return mixed
+     * @return bool
      */
     public function view(User $user, User $model): bool
     {
@@ -48,11 +48,13 @@ class UserPolicy
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return mixed
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
-        return $user->hasPermissionTo(Permissions::CREATE_USERS);
+        $userRoute = request()->route('user');
+
+        return $user->hasPermissionTo(Permissions::CREATE_USERS) || $user->id === optional($userRoute)->id;
     }
 
     /**
@@ -60,7 +62,7 @@ class UserPolicy
      *
      * @param User $user
      * @param User $model
-     * @return mixed
+     * @return bool
      */
     public function update(User $user, User $model): bool
     {
@@ -72,10 +74,10 @@ class UserPolicy
      *
      * @param User $user
      * @param User $model
-     * @return mixed
+     * @return bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo(Permissions::DELETE_USERS);
+        return $user->hasPermissionTo(Permissions::DELETE_USERS) || $user->id === $model->id;
     }
 }

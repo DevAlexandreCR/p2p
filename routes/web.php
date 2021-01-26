@@ -34,5 +34,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 });
 
 Route::middleware('auth')->prefix('user')->group(function() {
-    Route::get('/{user}/cart/', [CartController::class, 'show'])->name('cart.show');
+    Route::get('/{user}/cart', [CartController::class, 'show'])->name('cart.show');
+    Route::put('/{user}/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/{user}/cart/delete', [CartController::class, 'destroy'])->name('cart.delete');
+    Route::post('/{user}/cart/store', [CartController::class, 'store'])->name('cart.store');
 });

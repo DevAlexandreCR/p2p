@@ -2,29 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Decorators\CartDecorator;
+use App\Http\Requests\Carts\DeleteRequest;
+use App\Http\Requests\Carts\UpdateRequest;
 use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
 
-    public function __construct()
+    private $carts;
+
+    public function __construct(CartDecorator $carts)
     {
         $this->authorizeResource(User::class);
+        $this->carts = $carts;
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->store($request, $user);
+        return back()->with('success', trans('products.added'));
     }
 
     /**
@@ -36,41 +45,36 @@ class CartController extends Controller
     public function show(User $user): Renderable
     {
         return view('home.users.cart', [
-            'user' => $user->load('cart')
+            'user' => $this->carts->show($user)
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Cart $cart
-     * @return Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Cart $cart
-     * @return Response
+     * @param UpdateRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function update(Request $request, Cart $cart)
+    public function update(UpdateRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->update($request, $user);
+
+        return redirect(route('cart.show', $user->id))
+            ->with('success', trans('resources.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Cart $cart
-     * @return Response
+     * @param DeleteRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function destroy(Cart $cart)
+    public function destroy(DeleteRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->delete($request, $user);
+
+        return back()->with('success', trans('resources.removed'));
     }
 }

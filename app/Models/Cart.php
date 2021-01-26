@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Cart extends Model
 {
@@ -20,8 +20,11 @@ class Cart extends Model
         return $this->belongsTo(User::class)->select('id', 'name', 'email', 'enabled');
     }
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class)->select('id', 'name', 'price', 'stock', 'reference');
+        return $this->belongsToMany(Product::class)
+            ->select('name', 'price', 'stock', 'reference')
+            ->withPivot('quantity');
     }
+
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\UserController;
 
 use App\Constants\Permissions;
+use App\Models\User;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class ShowTest extends BaseControllerTest
@@ -33,7 +34,8 @@ class ShowTest extends BaseControllerTest
      */
     public function testAnUserWithoutPermissionsCannotExecuteThisAction()
     {
-        $response = $this->actingAs($this->admin)->get(route('users.show', $this->admin->id));
+        $anotherUser = User::factory()->create();
+        $response = $this->actingAs($this->admin)->get(route('users.show', $anotherUser->id));
 
         $response
             ->assertStatus(403)
