@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Carts;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -11,9 +12,9 @@ class StoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +22,12 @@ class StoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'product_id' => ['required', 'exists:products,id'],
+            'quantity'   => ['required', 'min:1', 'integer',
+                'max:' . optional(Product::find($this->get('product_id')))->stock]
         ];
     }
 }

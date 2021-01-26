@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\CartController;
-
 
 use App\Models\Product;
 use App\Models\User;
@@ -31,10 +29,12 @@ class StoreTest extends BaseControllerTest
             'stock' => 5
         ]);
 
-        $response = $this->actingAs($this->user)->post(route('cart.store', $this->user->id), [
-            'product_id' =>$product->id,
+        $response = $this->actingAs($this->user)->post(route('cart.store', [
+            'user' => $this->user->id,
+            'quantity' => 30]), [
+            'product_id' => $product->id,
             'quantity' => 2
-        ]);
+            ]);
 
         $response
             ->assertStatus(302)
@@ -64,7 +64,7 @@ class StoreTest extends BaseControllerTest
         ]);
 
         $response = $this->actingAs($this->user)->post(route('cart.store', $this->user->id), [
-            'product_id' =>$product->id,
+            'product_id' => $product->id,
             'quantity' => 2
         ]);
 

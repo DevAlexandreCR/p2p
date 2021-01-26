@@ -34,8 +34,8 @@ class ProductDecorator implements ProductInterface
 
         return Cache::tags('products')->rememberForever($query, function () use ($request) {
             return $this->products
-                ->name($request->get('name'))
-                ->reference($request->get('reference'))
+                ->name($request->input('name'))
+                ->reference($request->input('reference'))
                 ->paginate();
         });
     }
@@ -68,7 +68,7 @@ class ProductDecorator implements ProductInterface
     public function store(Request $request)
     {
         $request->merge([
-            'slug' => Str::slug($request->get('name'))
+            'slug' => Str::slug($request->input('name'))
         ]);
         $product = $this->products::create($request->all());
 

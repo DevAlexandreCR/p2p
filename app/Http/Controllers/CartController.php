@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Decorators\CartDecorator;
 use App\Http\Requests\Carts\DeleteRequest;
+use App\Http\Requests\Carts\StoreRequest;
 use App\Http\Requests\Carts\UpdateRequest;
 use App\Models\Cart;
 use App\Models\User;
@@ -26,11 +27,11 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreRequest $request
      * @param User $user
      * @return RedirectResponse
      */
-    public function store(Request $request, User $user): RedirectResponse
+    public function store(StoreRequest $request, User $user): RedirectResponse
     {
         $this->carts->store($request, $user);
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Interfaces;
-
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,5 +34,4 @@ interface CartInterface
      * @return mixed
      */
     public function store(Request $request, User $user);
-
 }

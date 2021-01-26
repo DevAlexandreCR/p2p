@@ -1,14 +1,14 @@
 <template>
   <div>
     <select class="form-select form-select-sm pe-5" :name="selectName"  aria-label="Select quantity" @change="total($event)">
-      <option v-for="num in stockAvailable">{{ num }}</option>
+      <option v-for="num in stockAvailable" :key="num">{{ num }}</option>
     </select>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SelectStockComponent",
+  name: 'SelectStockComponent',
 
   props: {
     stockAvailable: {
@@ -37,12 +37,12 @@ export default {
   },
 
   methods: {
-    total: function(event) {
-      let quantity = event.target.value
+    total: function (event) {
+      const quantity = event.target.value
       document.getElementById(this.inputPrintId).textContent = this.numberFormatter(this.price * quantity)
     },
 
-    numberFormatter:function (number){
+    numberFormatter: function (number) {
       const val = new Intl.NumberFormat('en').format(number)
       return `$ ${val}`
     }

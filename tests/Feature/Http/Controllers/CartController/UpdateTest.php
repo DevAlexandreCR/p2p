@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\CartController;
-
 
 use App\Models\Product;
 use App\Models\User;
@@ -35,7 +33,7 @@ class UpdateTest extends BaseControllerTest
         ]);
 
         $response = $this->actingAs($this->user)->put(route('cart.update', $this->user->id), [
-            'product_id' =>$product->id,
+            'product_id' => $product->id,
             'quantity' => 1
         ]);
 

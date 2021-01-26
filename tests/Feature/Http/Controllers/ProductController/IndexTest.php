@@ -35,7 +35,6 @@ class IndexTest extends BaseControllerTest
             ->assertViewHas('products')
             ->assertSee($name)
             ->assertSee($reference);
-
     }
     /**
      * Test an user without permissions can't execute this action.

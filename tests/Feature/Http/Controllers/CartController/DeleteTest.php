@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\CartController;
-
 
 use App\Models\Product;
 use App\Models\User;

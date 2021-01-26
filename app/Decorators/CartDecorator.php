@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Decorators;
-
 
 use App\Interfaces\CartInterface;
 use App\Models\User;
@@ -27,8 +25,8 @@ class CartDecorator implements CartInterface
      */
     public function update(Request $request, User $user): void
     {
-        $user->cart->products()->attach($request->get('product_id'), [
-            'quantity' => $request->get('quantity')
+        $user->cart->products()->attach($request->input('product_id'), [
+            'quantity' => $request->input('quantity')
         ]);
     }
 
@@ -39,7 +37,7 @@ class CartDecorator implements CartInterface
      */
     public function delete(Request $request, User $user): void
     {
-        $user->cart->products()->wherePivot('product_id', $request->get('product_id'))->detach();
+        $user->cart->products()->wherePivot('product_id', $request->input('product_id'))->detach();
     }
 
     /**
@@ -49,17 +47,18 @@ class CartDecorator implements CartInterface
      */
     public function store(Request $request, User $user)
     {
-        $productId = $request->get('product_id');
+        var_dump($request->input('quantity'));
+        $productId = $request->input('product_id');
 
         $product = $user->cart->products()->where('product_id', $productId)->first();
 
         if ($product) {
-            $product->pivot->quantity = $product->pivot->quantity + $request->get('quantity');
+            $product->pivot->quantity = $product->pivot->quantity + $request->input('quantity');
             return $product->pivot->save();
         }
 
         return $user->cart->products()->attach($productId, [
-            'quantity' => $request->get('quantity')
+            'quantity' => $request->input('quantity')
         ]);
     }
 }
