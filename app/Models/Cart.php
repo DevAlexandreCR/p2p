@@ -33,7 +33,7 @@ class Cart extends Model
     public function getTotalCartAttribute(): string
     {
         $total = 0;
-        $this->products()->each(function ($product) use(&$total){
+        $this->products()->each(function ($product) use (&$total) {
             $total += $product->price * $product->pivot->quantity;
         });
 
@@ -47,7 +47,7 @@ class Cart extends Model
     public function getTotalCartCountAttribute(): int
     {
         $total = 0;
-        $this->products()->each(function ($product) use (&$total){
+        $this->products()->each(function ($product) use (&$total) {
             $total += $product->pivot->quantity;
         });
 

@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 
-
 class CartController extends Controller
 {
 
