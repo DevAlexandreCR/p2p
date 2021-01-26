@@ -6,7 +6,6 @@ namespace App\Decorators;
 
 use App\Interfaces\CartInterface;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class CartDecorator implements CartInterface
@@ -46,10 +45,20 @@ class CartDecorator implements CartInterface
     /**
      * @param Request $request
      * @param User $user
+     * @return mixed
      */
-    public function store(Request $request, User $user): void
+    public function store(Request $request, User $user)
     {
-        $user->cart->products()->attach($request->get('product_id'), [
+        $productId = $request->get('product_id');
+
+        $product = $user->cart->products()->where('product_id', $productId)->first();
+
+        if ($product) {
+            $product->pivot->quantity = $product->pivot->quantity + $request->get('quantity');
+            return $product->pivot->save();
+        }
+
+        return $user->cart->products()->attach($productId, [
             'quantity' => $request->get('quantity')
         ]);
     }

@@ -33,6 +33,7 @@ class CartController extends Controller
     public function store(Request $request, User $user): RedirectResponse
     {
         $this->carts->store($request, $user);
+
         return back()->with('success', trans('products.added'));
     }
 

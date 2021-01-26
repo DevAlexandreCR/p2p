@@ -31,13 +31,9 @@ class StoreTest extends BaseControllerTest
             'stock' => 5
         ]);
 
-        $product->carts()->attach($this->user->cart->id, [
-            'quantity' => 1
-        ]);
-
         $response = $this->actingAs($this->user)->post(route('cart.store', $this->user->id), [
             'product_id' =>$product->id,
-            'quantity' => 1
+            'quantity' => 2
         ]);
 
         $response
@@ -47,7 +43,39 @@ class StoreTest extends BaseControllerTest
         $this->assertDatabaseHas('cart_product', [
             'cart_id' => $this->user->cart->id,
             'product_id' => $product->id,
-            'quantity' => 1
+            'quantity' => 2
+        ]);
+    }
+
+    /**
+     * Test an user without permissions can't execute this action.
+     *
+     * @return void
+     */
+    public function testAnUserWithPermissionsCanAddExistingProductToCart()
+    {
+        $this->withoutExceptionHandling();
+        $product = Product::factory()->create([
+            'stock' => 5
+        ]);
+
+        $product->carts()->attach($this->user->cart->id, [
+            'quantity' => 3
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('cart.store', $this->user->id), [
+            'product_id' =>$product->id,
+            'quantity' => 2
+        ]);
+
+        $response
+            ->assertStatus(302)
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('cart_product', [
+            'cart_id' => $this->user->cart->id,
+            'product_id' => $product->id,
+            'quantity' => 5
         ]);
     }
 

@@ -32,7 +32,9 @@ interface CartInterface
     /**
      * @param Request $request
      * @param User $user
+     *
+     * @return mixed
      */
-    public function store(Request $request, User $user): void;
+    public function store(Request $request, User $user);
 
 }
