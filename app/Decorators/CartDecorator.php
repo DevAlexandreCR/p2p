@@ -47,7 +47,6 @@ class CartDecorator implements CartInterface
      */
     public function store(Request $request, User $user)
     {
-        var_dump($request->input('quantity'));
         $productId = $request->input('product_id');
 
         $product = $user->cart->products()->where('product_id', $productId)->first();

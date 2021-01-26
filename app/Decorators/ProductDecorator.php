@@ -36,7 +36,7 @@ class ProductDecorator implements ProductInterface
             return $this->products
                 ->name($request->input('name'))
                 ->reference($request->input('reference'))
-                ->paginate();
+                ->paginate(12);
         });
     }
 

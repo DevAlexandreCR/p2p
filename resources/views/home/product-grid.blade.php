@@ -9,9 +9,16 @@
                         <p class="card-text text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $product->description }}">{{ $product->description }}</p>
                     </div>
                     <div class="row container mb-2 align-items-baseline">
-                        <div class="col-6 text-start">
-                            <a href="#" class="btn btn-primary"><i class="bi bi-cart-plus-fill"></i></a>
+                        <div class="col-6 text-start d-inline-flex">
                             <a href="{{ route('home.show', ['product' => $product->slug]) }}" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a>
+                            @auth()
+                                <form action="{{ route('cart.store', auth()->user()) }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ 1 }}">
+                                    <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-cart-plus-fill"></i></button>
+                                </form>
+                            @endauth
                         </div>
                         <div class="col-6 pe-0 fw-bold text-end">$ {{ number_format($product->price) }}</div>
                     </div>
