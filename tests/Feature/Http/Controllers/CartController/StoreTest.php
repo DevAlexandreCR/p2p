@@ -24,7 +24,6 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $this->withoutExceptionHandling();
         $product = Product::factory()->create([
             'stock' => 5
         ]);
@@ -54,7 +53,6 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanAddExistingProductToCart()
     {
-        $this->withoutExceptionHandling();
         $product = Product::factory()->create([
             'stock' => 5
         ]);
