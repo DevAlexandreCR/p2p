@@ -17,13 +17,13 @@
 
 <script>
 export default {
-  name: "OrderByComponent",
+  name: 'OrderByComponent',
 
-  data() {
+  data () {
     return {
       orderBy: [
-          'price',
-          'name'
+        'price',
+        'name'
       ]
     }
   },

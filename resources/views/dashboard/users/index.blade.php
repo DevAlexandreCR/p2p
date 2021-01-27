@@ -59,21 +59,11 @@
                                        href="{{route('users.show', $user->id)}}">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
-                                    <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST">
-                                        @csrf @method('PUT')
-                                        <input type="hidden" name="enabled" value="@if($user->enabled) {{0}}@else {{1}} @endif">
-                                        <button type="submit" class="btn btn-light btn-sm"
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                title="@if($user->enabled) {{trans('actions.disable')}} @else{{trans('actions.enable')}} @endif">
-                                            @if($user->enabled)
-                                                <i class="bi bi-x-circle-fill text-danger"></i>
-                                            @else
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                            @endif
-
-                                        </button>
-                                    </form>
+                                    <switch-component
+                                            :form-id="'formEnableUser'"
+                                            :input-id="'enableUser'"
+                                            :status="@if($user->enabled) true @else false @endif">
+                                    </switch-component>
                                 </div>
                             </td>
                         </tr>
@@ -81,6 +71,10 @@
                     </tbody>
                 </table>
             </div>
+            <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST" id="formEnableUser">
+                @csrf @method('PUT')
+                <input type="hidden" name="enabled" id="enableUser">
+            </form>
             <div class="row row-cols-2 text-end pe-5">
                 <div class="col-sm-6">{{$users->onEachSide(5)->links()}}</div>
                 <div class="col-sm-6">

@@ -13,9 +13,9 @@
             </div>
             <div class="col-md-4">
                 <form class="d-flex" action="{{route('products.index')}}" method="get">
-                    <input class="form-control me-2" type="search" name="name" value="{{request()->get('name')}}"
+                    <input class="form-control me-2" type="search" name="name" value="{{request()->input('name')}}"
                            placeholder="{{trans('products.name')}}" aria-label="Search">
-                    <input class="form-control me-2" type="search" name="reference" value="{{request()->get('reference')}}"
+                    <input class="form-control me-2" type="search" name="reference" value="{{request()->input('reference')}}"
                            placeholder="{{trans('products.reference')}}" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">{{trans('actions.search')}}</button>
                 </form>
