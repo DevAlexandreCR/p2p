@@ -2,6 +2,7 @@
 
 namespace App\Decorators;
 
+use App\Actions\VerifyQuantityProducts;
 use App\Interfaces\CartInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -50,6 +51,8 @@ class CartDecorator implements CartInterface
         $productId = $request->input('product_id');
 
         $product = $user->cart->products()->where('product_id', $productId)->first();
+
+        VerifyQuantityProducts::execute($request, $product);
 
         if ($product) {
             $product->pivot->quantity = $product->pivot->quantity + $request->input('quantity');
