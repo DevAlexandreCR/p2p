@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-6">
       <select class="form-select form-select-sm" aria-label="select order" name="orderBy" v-model="orderBy">
-        <option selected :value="orderBySelected">{{ orderBySelected }}</option>
-        <option v-for="by in fields" :value="by" :key="by">{{ by }}</option>
+        <option selected :value="orderBySelected">{{ capitalize(orderBySelected) }}</option>
+        <option v-for="by in fields" :value="by" :key="by">{{ capitalize(by) }}</option>
       </select>
     </div>
     <div class="col-6">
       <select class="form-select form-select-sm" aria-label="select order" name="order" @change="submit($event)">
-        <option selected :value="orderSelected">{{ orderSelected }}</option>
+        <option selected :value="orderSelected">{{ capitalize(orderSelected) }}</option>
         <option :value="'asc'">Asc</option>
         <option :value="'desc'">Desc</option>
       </select>
@@ -60,6 +60,11 @@ export default {
       inputOrderBy.setAttribute('type', 'hidden')
       inputOrderBy.value = this.orderBy
       form.submit()
+    },
+
+    capitalize: function(str) {
+      const lower = str.toLowerCase()
+      return str.charAt(0).toUpperCase() + lower.slice(1)
     }
   }
 }
