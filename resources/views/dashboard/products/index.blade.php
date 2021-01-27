@@ -45,7 +45,7 @@
                             <td>{{ number_format($product->price, 2) }}</td>
                             <td>{{ $product->stock }}</td>
                             <td class="text-center" style="border-left: groove">
-                                <div class="d-inline">
+                                <div class="d-inline-flex text-center">
                                     <button class="btn btn-light btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#product-modal" data-bs-product="{{ $product }}">
                                         <i class="bi bi-eye-fill"></i>
@@ -57,23 +57,25 @@
                                        href="{{route('products.show', $product->id)}}">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
-                                    <form class="d-inline" action="{{route('products.destroy', $product->id)}}" method="POST">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-light btn-sm text-danger"
-                                                data-bs-toggle="tooltip"
-                                                data-placement="top">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </form>
+                                    <switch-component
+                                            :form-id="'formEnableProduct'"
+                                            :input-id="'enableProduct'"
+                                            :action="'{{route('products.update', $product->id)}}'"
+                                            :status="@if($product->enabled) true @else false @endif">
+                                    </switch-component>
                                 </div>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                <form class="d-inline"  method="POST" id="formEnableProduct">
+                    @csrf @method('PUT')
+                    <input type="hidden" name="enabled" id="enableProduct">
+                </form>
             </div>
             <div class="row row-cols-2 text-end pe-5">
-                <div class="col-sm-6">{{$products->onEachSide(5)->links()}}</div>
+                <div class="col-sm-6">{{$products->onEachSide(3)->links()}}</div>
                 <div class="col-sm-6">
                     <div class="card-title">
                         {{trans_choice('products.product', $products->total(), ['product_count'=> $products->total()])}}

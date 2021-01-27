@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\File;
 
 class ProductDecorator implements ProductInterface
 {

@@ -18,7 +18,8 @@ class Product extends Model
         'stock',
         'price',
         'image',
-        'slug'
+        'slug',
+        'enabled'
     ];
 
     public function carts(): BelongsToMany
@@ -28,13 +29,15 @@ class Product extends Model
 
     public function scopeName(Builder $query, ?string $name): Builder
     {
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price', 'image', 'slug')
+        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
+            'image', 'slug', 'enabled')
             ->where('name', 'like', '%' . $name . '%');
     }
 
     public function scopeReference(Builder $query, ?string $reference): Builder
     {
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price', 'image', 'slug')
+        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
+            'image', 'slug', 'enabled')
             ->where('reference', 'like', '%' . $reference . '%');
     }
 
