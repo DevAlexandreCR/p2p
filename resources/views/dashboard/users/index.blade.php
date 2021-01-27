@@ -47,7 +47,7 @@
                                 </td>
                             @endif
                             <td class="text-center" style="border-left: groove">
-                                <div class="d-inline">
+                                <div class="d-inline-flex text-center">
                                     <button class="btn btn-light btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#user-modal" data-bs-user="{{ $user }}">
                                         <i class="bi bi-eye-fill"></i>
@@ -62,6 +62,7 @@
                                     <switch-component
                                             :form-id="'formEnableUser'"
                                             :input-id="'enableUser'"
+                                            :action="'{{route('users.update', $user->id)}}'"
                                             :status="@if($user->enabled) true @else false @endif">
                                     </switch-component>
                                 </div>
@@ -71,7 +72,7 @@
                     </tbody>
                 </table>
             </div>
-            <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST" id="formEnableUser">
+            <form class="d-inline"  method="POST" id="formEnableUser">
                 @csrf @method('PUT')
                 <input type="hidden" name="enabled" id="enableUser">
             </form>
