@@ -27,7 +27,8 @@ return [
         "remove" => "Ésta acción eliminará el producto",
         "remove_category" => "Ésta acción eliminará la categoría y sus productos",
         "remove_tag" => "Ésta acción eliminará la etiqueta",
-        "ups" => "Ups!"
+        "ups" => "Ups!",
+        "no_stock" => "No hay más stock disponible"
     ],
     "name" => "Nombre del producto",
     "new" => "Agregar un producto nuevo",

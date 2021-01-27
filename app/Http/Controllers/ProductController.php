@@ -82,8 +82,7 @@ class ProductController extends Controller
     {
         $this->products->update($request, $product);
 
-        return redirect(route('products.show', $product->id))
-            ->with('success', trans('resources.updated'));
+        return back()->with('success', trans('resources.updated'));
     }
 
     /**

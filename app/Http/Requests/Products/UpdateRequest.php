@@ -32,6 +32,7 @@ class UpdateRequest extends FormRequest
                 'unique:products,reference,' . $this->route('product')->id],
             'stock'       => ['integer', 'min:1'],
             'price'       => ['numeric', 'min:0.1'],
+            'enabled'     => ['boolean']
         ];
     }
 }

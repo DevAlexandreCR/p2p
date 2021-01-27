@@ -7,6 +7,9 @@ import ProductModalComponent from './components/ProductModalComponent'
 import UserModalComponent from './components/UserModalComponent'
 import SelectStockComponent from './components/SelectStockComponent'
 import SelectQuantityComponent from './components/SelectQuantityComponent'
+import OrderByComponent from './components/OrderByComponent'
+import SwitchComponent from './components/SwitchComponent'
+import BackButtonComponent from './components/BackButtonComponent'
 
 window.Vue = Vue
 
@@ -17,6 +20,9 @@ Vue.component('product-modal-component', ProductModalComponent)
 Vue.component('user-modal-component', UserModalComponent)
 Vue.component('select-stock-component', SelectStockComponent)
 Vue.component('select-quantity-component', SelectQuantityComponent)
+Vue.component('order-by-component', OrderByComponent)
+Vue.component('switch-component', SwitchComponent)
+Vue.component('back-button-component', BackButtonComponent)
 
 new Vue({
   el: '#app'

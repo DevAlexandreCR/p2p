@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('stock');
             $table->unsignedDecimal('price', 10)->default(0);
             $table->string('image', 255)->default('default.png');
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
         });
     }

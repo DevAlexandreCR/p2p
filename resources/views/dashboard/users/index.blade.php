@@ -20,8 +20,8 @@
             </div>
         </div>
         <div class="card px-2 my-2">
-            <div class="card-body">
-                <table class="table table-sm table-hover table-responsive-lg">
+            <div class="card-body table-responsive-lg">
+                <table class="table table-sm table-hover">
                     <thead>
                     <tr>
                         <th>{{trans('fields.id')}}</th>
@@ -47,7 +47,7 @@
                                 </td>
                             @endif
                             <td class="text-center" style="border-left: groove">
-                                <div class="d-inline">
+                                <div class="d-inline-flex text-center">
                                     <button class="btn btn-light btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#user-modal" data-bs-user="{{ $user }}">
                                         <i class="bi bi-eye-fill"></i>
@@ -59,21 +59,12 @@
                                        href="{{route('users.show', $user->id)}}">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                     </a>
-                                    <form class="d-inline" action="{{route('users.update', $user->id)}}" method="POST">
-                                        @csrf @method('PUT')
-                                        <input type="hidden" name="enabled" value="@if($user->enabled) {{0}}@else {{1}} @endif">
-                                        <button type="submit" class="btn btn-light btn-sm"
-                                                data-toggle="tooltip"
-                                                data-placement="top"
-                                                title="@if($user->enabled) {{trans('actions.disable')}} @else{{trans('actions.enable')}} @endif">
-                                            @if($user->enabled)
-                                                <i class="bi bi-x-circle-fill text-danger"></i>
-                                            @else
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                            @endif
-
-                                        </button>
-                                    </form>
+                                    <switch-component
+                                            :form-id="'formEnableUser'"
+                                            :input-id="'enableUser'"
+                                            :action="'{{route('users.update', $user->id)}}'"
+                                            :status="@if($user->enabled) true @else false @endif">
+                                    </switch-component>
                                 </div>
                             </td>
                         </tr>
@@ -81,8 +72,12 @@
                     </tbody>
                 </table>
             </div>
+            <form class="d-inline"  method="POST" id="formEnableUser">
+                @csrf @method('PUT')
+                <input type="hidden" name="enabled" id="enableUser">
+            </form>
             <div class="row row-cols-2 text-end pe-5">
-                <div class="col-sm-6">{{$users->onEachSide(5)->links()}}</div>
+                <div class="col-sm-6">{{$users->onEachSide(3)->withQueryString()->links()}}</div>
                 <div class="col-sm-6">
                     <div class="card-title">
                         {{trans_choice('users.user', $users->total(), ['user_count'=> $users->total()])}}

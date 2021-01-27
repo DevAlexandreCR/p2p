@@ -21,7 +21,7 @@
         @include('layouts.nav')
 
         <main class="py-0">
-            @include('toast')
+            @include('layouts.toast')
             @yield('content')
         </main>
     </div>

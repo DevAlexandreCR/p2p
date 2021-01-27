@@ -9,8 +9,12 @@ use Intervention\Image\Facades\Image;
 
 class ImageStorageAction
 {
-    public static function execute(UploadedFile $image, Model $model): void
+    public static function execute(?UploadedFile $image, Model $model): void
     {
+        if (!$image) {
+            return;
+        }
+
         $name = self::saveImage($image);
 
         $model->update([

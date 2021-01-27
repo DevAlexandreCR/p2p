@@ -27,7 +27,8 @@ return [
         "remove" => "This action will remove product",
         "remove_category" => "This action will remove the category and its products",
         "remove_tag" => "This action will remove the tag",
-        "ups" => "Woops!"
+        "ups" => "Woops!",
+        "no_stock" => "No more stock available"
     ],
     "name" => "Product name",
     "new" => "Add new product",

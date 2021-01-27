@@ -50,7 +50,8 @@ export default {
         description: '',
         stock: 0,
         price: 0
-      }
+      },
+      imagePath: window.imagePath
     }
   },
 

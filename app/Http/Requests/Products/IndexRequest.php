@@ -5,6 +5,7 @@ namespace App\Http\Requests\Products;
 use App\Constants\Permissions;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class IndexRequest extends FormRequest
 {
@@ -26,8 +27,13 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'max:30', 'nullable'],
-            'reference' => ['string', 'max:10', 'nullable']
+            'name'      => ['string', 'max:30', 'nullable'],
+            'reference' => ['string', 'max:10', 'nullable'],
+            'min'       => ['integer', 'min:0'],
+            'max'       => ['integer', 'min:0'],
+            'admin'     => ['boolean'],
+            'orderBy'   => ['string', Rule::in(['name', 'reference', 'price', 'enabled'])],
+            'order'     => ['string', Rule::in(['asc', 'desc'])]
         ];
     }
 }
