@@ -2,7 +2,7 @@
 
 @section('main')
     <div class="container">
-        <div class="container py-4">
+        <div class="container py-4 d-flex">
             <button type="button" data-bs-toggle="modal" data-bs-target="#addRole" class="btn btn-primary">{{trans('Add role')}}</button>
         </div>
         <div class="row">
