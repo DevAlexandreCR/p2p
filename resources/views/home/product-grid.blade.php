@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row mb-5">
+    <div class="row my-3">
         @foreach($products as $product)
             <div class="col-sm-3 mb-2">
                 <div class="card">
@@ -25,6 +25,16 @@
                 </div>
             </div>
         @endforeach
+            <div class="row">
+                <div class="col-sm-6 text-end align-items-lg-baseline">
+                    <small class="small me-4">
+                        {{ trans('showing ' . $products->lastItem() . ' of ' . $products->total()) }}
+                    </small>
+                </div>
+                <div class="col-sm-6">
+                    {{ $products->onEachSide(1)->links() }}
+                </div>
+            </div>
 
         @if($products->count() === 0)
                 <div class="alert alert-warning w-50 mx-auto mt-5 text-center" role="alert">
