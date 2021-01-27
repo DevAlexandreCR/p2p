@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Actions;
-
 
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -18,11 +16,11 @@ class VerifyQuantityProducts
      */
     public static function execute(Request $request, ?Product $product): void
     {
-         if ($product && !self::verifyQuantity($request, $product)) {
-             throw ValidationException::withMessages([
-                 trans('products.messages.no_stock')
-             ]);
-         }
+        if ($product && !self::verifyQuantity($request, $product)) {
+            throw ValidationException::withMessages([
+                trans('products.messages.no_stock')
+            ]);
+        }
     }
 
     /**

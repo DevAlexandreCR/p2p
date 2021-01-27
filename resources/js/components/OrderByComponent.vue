@@ -50,19 +50,19 @@ export default {
 
   methods: {
     submit: function (event) {
-      let form = document.getElementById(this.formId)
-      let inputOrder = form.appendChild(document.createElement('input'))
+      const form = document.getElementById(this.formId)
+      const inputOrder = form.appendChild(document.createElement('input'))
       inputOrder.setAttribute('name', 'order')
       inputOrder.setAttribute('type', 'hidden')
       inputOrder.value = event.target.value
-      let inputOrderBy = form.appendChild(document.createElement('input'))
+      const inputOrderBy = form.appendChild(document.createElement('input'))
       inputOrderBy.setAttribute('name', 'orderBy')
       inputOrderBy.setAttribute('type', 'hidden')
       inputOrderBy.value = this.orderBy
       form.submit()
     },
 
-    capitalize: function(str) {
+    capitalize: function (str) {
       const lower = str.toLowerCase()
       return str.charAt(0).toUpperCase() + lower.slice(1)
     }

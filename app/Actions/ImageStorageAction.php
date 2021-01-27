@@ -11,7 +11,9 @@ class ImageStorageAction
 {
     public static function execute(?UploadedFile $image, Model $model): void
     {
-        if(!$image) return;
+        if (!$image) {
+            return;
+        }
 
         $name = self::saveImage($image);
 

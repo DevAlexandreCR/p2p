@@ -39,8 +39,17 @@ class Product extends Model
      */
     public function scopeName(Builder $query, ?string $name): Builder
     {
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
-            'image', 'slug', 'enabled')
+        return $query->select(
+            'id',
+            'name',
+            'reference',
+            'stock',
+            'description',
+            'price',
+            'image',
+            'slug',
+            'enabled'
+        )
             ->where('name', 'like', '%' . $name . '%');
     }
 
@@ -51,8 +60,17 @@ class Product extends Model
      */
     public function scopeReference(Builder $query, ?string $reference): Builder
     {
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
-            'image', 'slug', 'enabled')
+        return $query->select(
+            'id',
+            'name',
+            'reference',
+            'stock',
+            'description',
+            'price',
+            'image',
+            'slug',
+            'enabled'
+        )
             ->where('reference', 'like', '%' . $reference . '%');
     }
 
@@ -75,8 +93,17 @@ class Product extends Model
      */
     public function scopePrice(Builder $query, ?float $min, ?float $max): ?Builder
     {
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
-            'image', 'slug', 'enabled')
+        return $query->select(
+            'id',
+            'name',
+            'reference',
+            'stock',
+            'description',
+            'price',
+            'image',
+            'slug',
+            'enabled'
+        )
             ->whereBetween('price', [$min ?? 0, $max ?? config('app.max')]);
     }
 
@@ -87,9 +114,20 @@ class Product extends Model
      */
     public function scopeEnabled(Builder $query, ?bool $admin): ?Builder
     {
-        if( $admin ) return null;
-        return $query->select('id', 'name', 'reference', 'stock', 'description', 'price',
-            'image', 'slug', 'enabled')
+        if ($admin) {
+            return null;
+        }
+        return $query->select(
+            'id',
+            'name',
+            'reference',
+            'stock',
+            'description',
+            'price',
+            'image',
+            'slug',
+            'enabled'
+        )
             ->where('enabled', true);
     }
 

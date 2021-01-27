@@ -9,7 +9,7 @@ import SelectStockComponent from './components/SelectStockComponent'
 import SelectQuantityComponent from './components/SelectQuantityComponent'
 import OrderByComponent from './components/OrderByComponent'
 import SwitchComponent from './components/SwitchComponent'
-import BackButtonComponent from "./components/BackButtonComponent";
+import BackButtonComponent from './components/BackButtonComponent'
 
 window.Vue = Vue
 

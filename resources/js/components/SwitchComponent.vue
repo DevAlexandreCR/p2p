@@ -9,7 +9,7 @@
 export default {
   name: 'SwitchComponent',
 
-  data() {
+  data () {
     return {
       changeStatus: false
     }
@@ -36,14 +36,14 @@ export default {
 
   methods: {
     submit: function () {
-      this.changeStatus = !this.changeStatus  ? 1 : 0
+      this.changeStatus = !this.changeStatus ? 1 : 0
       document.getElementById(this.inputId).value = this.changeStatus
       document.getElementById(this.formId).action = this.action
       document.getElementById(this.formId).submit()
     }
   },
 
-  mounted() {
+  mounted () {
     this.changeStatus = this.status
   }
 }

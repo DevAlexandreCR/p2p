@@ -9,9 +9,9 @@
 
 <script>
 export default {
-  name: "BackButtonComponent",
+  name: 'BackButtonComponent',
   methods: {
-    goBack() {
+    goBack () {
       history.back()
     }
   }
