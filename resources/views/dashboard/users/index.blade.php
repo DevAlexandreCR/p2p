@@ -20,8 +20,8 @@
             </div>
         </div>
         <div class="card px-2 my-2">
-            <div class="card-body">
-                <table class="table table-sm table-hover table-responsive-lg">
+            <div class="card-body table-responsive-lg">
+                <table class="table table-sm table-hover">
                     <thead>
                     <tr>
                         <th>{{trans('fields.id')}}</th>
