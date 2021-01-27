@@ -77,7 +77,7 @@
                 <input type="hidden" name="enabled" id="enableUser">
             </form>
             <div class="row row-cols-2 text-end pe-5">
-                <div class="col-sm-6">{{$users->onEachSide(3)->links()}}</div>
+                <div class="col-sm-6">{{$users->onEachSide(3)->withQueryString()->links()}}</div>
                 <div class="col-sm-6">
                     <div class="card-title">
                         {{trans_choice('users.user', $users->total(), ['user_count'=> $users->total()])}}

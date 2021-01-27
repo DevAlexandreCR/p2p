@@ -75,7 +75,7 @@
                 </form>
             </div>
             <div class="row row-cols-2 text-end pe-5">
-                <div class="col-sm-6">{{$products->onEachSide(3)->links()}}</div>
+                <div class="col-sm-6">{{$products->onEachSide(3)->withQueryString()->links()}}</div>
                 <div class="col-sm-6">
                     <div class="card-title">
                         {{trans_choice('products.product', $products->total(), ['product_count'=> $products->total()])}}

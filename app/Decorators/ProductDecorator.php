@@ -33,8 +33,11 @@ class ProductDecorator implements ProductInterface
 
         return Cache::tags('products')->rememberForever($query, function () use ($request) {
             return $this->products
+                ->price($request->input('min'), $request->input('max'))
+                ->enabled($request->input('admin'))
                 ->name($request->input('name'))
                 ->reference($request->input('reference'))
+                ->order($request->input('orderBy'), $request->input('order'))
                 ->paginate(12);
         });
     }
