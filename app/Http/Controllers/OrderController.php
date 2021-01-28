@@ -56,7 +56,7 @@ class OrderController extends Controller
      */
     public function show(User $user, Order $order): Renderable
     {
-        if($order->status === Orders::STATUS_PENDING) {
+        if ($order->status === Orders::STATUS_PENDING) {
             $this->orders->update($order);
         }
 

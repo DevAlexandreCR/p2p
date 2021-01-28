@@ -235,6 +235,10 @@ class PlaceToPay implements GatewayInterface
         return redirect()->away($processUrl)->send();
     }
 
+    /**
+     * @param $response
+     * @return string
+     */
     public function changeStatus($response): string
     {
         return $response->status->message === 'Se ha reversado el pago correctamente' ? Statuses::STATUS_REFUNDED :

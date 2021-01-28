@@ -22,11 +22,17 @@ class Payment extends Model
         'currency'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function payer(): BelongsTo
     {
         return $this->belongsTo(Payer::class);
