@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Constants\Roles;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Policies\CartPolicy;
+use App\Policies\OrderPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
@@ -24,10 +26,11 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Role::class => RolePolicy::class,
-        User::class => UserPolicy::class,
+        Role::class       => RolePolicy::class,
+        User::class       => UserPolicy::class,
         Permission::class => PermissionPolicy::class,
-        Product::class => ProductPolicy::class
+        Product::class    => ProductPolicy::class,
+        Order::class      => OrderPolicy::class
     ];
 
     /**

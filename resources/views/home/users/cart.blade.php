@@ -101,14 +101,15 @@
                             <hr>
                             <div class="row font-weight-bold">
                                 <div class="col-6 text-right">{{trans('orders.total')}}</div>
-                                <div class="col-6 text-right fw-bold">$ {{ $user->cart->totalCart }}</div>
+                                <div class="col-6 text-right fw-bold">$ {{ number_format($user->cart->totalCart) }}</div>
                             </div>
                         </div>
                         <div class="card-footer">
                             <div class="" role="group">
-                                <form class="btn-block"  method="post">
+                                <form class="btn-block" action="{{ route('users.orders.store', $user) }}"  method="post">
                                     @csrf
                                     <input type="hidden" name="user_id" value="{{$user->id}}">
+                                    <input type="hidden" name="gateway_name" value="placeToPay">
                                     <button type="submit" class="btn btn-success me-2 w-100">{{trans('payment.pay')}}</button>
                                 </form>
                                 <a href="{{route('home')}}" type="button" class="link-dark w-100 mt-2">{{trans('payment.continue')}}</a>

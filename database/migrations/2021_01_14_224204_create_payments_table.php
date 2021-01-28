@@ -1,7 +1,8 @@
 <?php
 
 use App\Constants\Currencies;
-use App\Constants\Payments;
+use App\Constants\PaymentGateway;
+use App\Gateways\PlaceToPay\Statuses;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,8 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->string('request_id')->nullable();
             $table->string('process_url')->nullable();
-            $table->enum('status', Payments::values())->default(Payments::STATUS_PENDING);
+            $table->enum('status', Statuses::values())->default(Statuses::STATUS_PENDING);
+            $table->enum('gateway', [PaymentGateway::PLACE_TO_PAY, PaymentGateway::FAKE_PAYMENT]);
             $table->string('reference')->nullable();
             $table->string('method')->nullable();
             $table->string('last_digit')->nullable();

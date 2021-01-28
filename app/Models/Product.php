@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Constants\Permissions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Http\Request;
 
 class Product extends Model
 {
@@ -30,6 +28,16 @@ class Product extends Model
     public function carts(): BelongsToMany
     {
         return $this->belongsToMany(Cart::class)->withPivot('quantity');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function order(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)
+            ->using(OrderProduct::class)
+            ->withPivot('quantity');
     }
 
     /**
