@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\OrderController;
-
 
 use App\Constants\PaymentGateway;
 use App\Models\Order;
@@ -21,7 +19,7 @@ class ReverseTest extends BaseControllerTest
         $this->order = Order::factory()->create([
             'user_id' => $this->admin->id
         ]);
-        Product::factory(3)->create()->each(function ($product){
+        Product::factory(3)->create()->each(function ($product) {
             $product->order()->attach($this->order->id, [
                 'quantity' => 1
             ]);

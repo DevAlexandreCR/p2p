@@ -27,7 +27,7 @@ class OrderController extends Controller
      * @param User $user
      * @return Renderable
      */
-    public function index(User $user):  Renderable
+    public function index(User $user): Renderable
     {
         return view('home.users.orders.index', [
             'orders' => $this->orders->all($user)

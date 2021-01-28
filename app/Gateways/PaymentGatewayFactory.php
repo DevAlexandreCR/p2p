@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Gateways;
 
-
-abstract  class PaymentGatewayFactory
+abstract class PaymentGatewayFactory
 {
     /**
      * create new instance of payment gateway

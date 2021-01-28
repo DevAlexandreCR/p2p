@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Http\Controllers\OrderController;
-
 
 use App\Constants\PaymentGateway;
 use App\Gateways\PlaceToPay\PlaceToPay;
@@ -25,7 +23,7 @@ class StoreTest extends BaseControllerTest
         $this->admin->cart->products()->attach($product->id, [
             'quantity' => 1
         ]);
-        $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id) , [
+        $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id), [
             'gateway_name' => PaymentGateway::PLACE_TO_PAY
         ]);
         $mock->shouldReceive('create');
