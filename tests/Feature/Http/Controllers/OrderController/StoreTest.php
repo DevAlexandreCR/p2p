@@ -3,9 +3,13 @@
 namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\PaymentGateway;
+use App\Gateways\GatewayInterface;
+use App\Gateways\MakeRequest;
 use App\Gateways\PlaceToPay\PlaceToPay;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Mockery\MockInterface;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class StoreTest extends BaseControllerTest
@@ -18,15 +22,19 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $mock = $this->mock(PlaceToPay::class);
+        $this->withoutExceptionHandling();
+        $this->instance(GatewayInterface::class, function (MockInterface $mock) {
+            $mock->shouldReceive('create')->once();
+        });
         $product = Product::factory()->create();
         $this->admin->cart->products()->attach($product->id, [
             'quantity' => 1
         ]);
+
         $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id), [
             'gateway_name' => PaymentGateway::PLACE_TO_PAY
         ]);
-        $mock->shouldReceive('create');
+
         $response
             ->assertStatus(302);
         $this
