@@ -90,7 +90,6 @@ class PlaceToPay implements GatewayInterface
                 $this->baseUrl . $this->endPoint,
                 $this->data($payment->order)
             )->object();
-
             $this->updatePayment($response, $payment);
             return redirect()->away($response->processUrl)->send();
         } catch (ClientException | ServerException $e) {
@@ -162,12 +161,10 @@ class PlaceToPay implements GatewayInterface
      */
     private function updatePayment($response, Payment $payment): void
     {
-        $status = $response->status->status;
+        $status = $this->changeStatus($response);
 
         switch ($status) {
             case Statuses::STATUS_APPROVED:
-                $requestId = $response->requestId;
-                $processUrl = $response->processUrl;
                 $payer = $response->request->payer;
                 $dbPayer = Payer::create(
                     [
@@ -180,31 +177,48 @@ class PlaceToPay implements GatewayInterface
                     ]
                 );
                 $payment->update([
-                    'request_id'  => $requestId,
-                    'process_url' => $processUrl,
                     'payer_id'   => $dbPayer->id,
                     'reference'  => $response->payment[0]->internalReference,
                     'method'     => $response->payment[0]->paymentMethod,
-                    'last_digit' => $response->payment[0]->processorFields[0]->value
+                    'last_digit' => $response->payment[0]->processorFields[0]->value,
+                    'status'     => $status
                 ]);
                 $payment->order()->update([
                     'status' => Orders::STATUS_COMPLETED
                 ]);
                 break;
             case Statuses::STATUS_REFUNDED:
-                $payment->order->products()->dettach();
+                $payment->order->products()->detach();
+                $payment->update([
+                    'status'      => Statuses::STATUS_REFUNDED
+                ]);
                 $payment->order()->update([
                     'status' => Orders::STATUS_CANCELED
                 ]);
                 break;
+            case Statuses::STATUS_OK:
+                $requestId = $response->requestId;
+                $processUrl = $response->processUrl;
+                $payment->update([
+                    'request_id'  => $requestId,
+                    'process_url' => $processUrl,
+                    'status'      => Statuses::STATUS_PENDING
+                ]);
+                break;
             default:
                 $payment->update([
-                    'status' => $status === 'OK' ? Statuses::STATUS_PENDING : $status
+                    'status' => $status
                 ]);
                 break;
         }
     }
 
+    /**
+     * @param $response
+     * @param Order $order
+     * @param string $gateway
+     * @return RedirectResponse
+     */
     private function createPayment($response, Order $order, string $gateway): RedirectResponse
     {
         $requestId = $response->requestId;
@@ -219,5 +233,11 @@ class PlaceToPay implements GatewayInterface
         ]);
 
         return redirect()->away($processUrl)->send();
+    }
+
+    public function changeStatus($response): string
+    {
+        return $response->status->message === 'Se ha reversado el pago correctamente' ? Statuses::STATUS_REFUNDED :
+            $response->status->status;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Decorators;
 
+use App\Constants\Orders;
 use App\Constants\PaymentGateway;
 use App\Interfaces\OrderInterface;
 use App\Models\Order;
@@ -29,9 +30,9 @@ class OrderDecorator implements OrderInterface
      */
     public function show(Order $order)
     {
-        return Cache::tags('users.orders')->rememberForever($order->reference, function () use ($order) {
-            return $order->with('payments');
-        });
+        $order->payments()->first()->fresh();
+
+        return $order->fresh();
     }
 
     /**

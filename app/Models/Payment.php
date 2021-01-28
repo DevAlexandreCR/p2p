@@ -26,4 +26,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function payer(): BelongsTo
+    {
+        return $this->belongsTo(Payer::class);
+    }
 }
