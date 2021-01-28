@@ -40,4 +40,10 @@ interface OrderInterface
      * @return mixed
      */
     public function retry(Order $order);
+
+    /**
+     * @param Order $order
+     * @return mixed
+     */
+    public function reverse(Order $order);
 }

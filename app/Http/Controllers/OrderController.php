@@ -87,4 +87,17 @@ class OrderController extends Controller
 
         return $this->orders->retry($order);
     }
+
+    /**
+     * @param User $user
+     * @param Order $order
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function reverse(User $user, Order $order): RedirectResponse
+    {
+        $this->authorize('update', $order);
+
+        return $this->orders->reverse($order);
+    }
 }

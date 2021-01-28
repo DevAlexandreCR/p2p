@@ -124,14 +124,14 @@ class PlaceToPay implements GatewayInterface
                 ]
             )->object();
 
-            return $this->createPayment($response, $payment->order, $this->gateway);
+            $this->updatePayment($response, $payment);
+
+            $message = $response->status->message;
         }catch (ClientException | ServerException $e) {
-            $payment->update([
-                'status'   => Statuses::STATUS_FAILED
-            ]);
-            return redirect()->to(route('user.order.show', [auth()->id(), $payment->order->id]))
-                ->with('message', $e->getMessage());
+            $message = $e->getMessage();
         }
+        return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
+            ->with('message', $message);
     }
 
     /**

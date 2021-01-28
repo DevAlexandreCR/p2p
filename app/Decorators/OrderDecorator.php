@@ -91,4 +91,18 @@ class OrderDecorator implements OrderInterface
 
         return $payment->retry($order->payments()->first());
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function reverse(Order $order)
+    {
+        Cache::tags('users.orders')->flush();
+
+        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$order->payments()->first()->gateway];
+
+        $payment = (new $paymentGateway)->create();
+
+        return $payment->reverse($order->payments()->first());
+    }
 }
