@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Constants;
+namespace App\Gateways\PlaceToPay;
 
 use MyCLabs\Enum\Enum;
 
-class Payments extends Enum
+class Statuses extends Enum
 {
     public const STATUS_PENDING = 'PENDING';
     public const STATUS_FAILED = 'FAILED';

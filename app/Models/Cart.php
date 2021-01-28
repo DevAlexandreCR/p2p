@@ -37,7 +37,7 @@ class Cart extends Model
             $total += $product->price * $product->pivot->quantity;
         });
 
-        return number_format($total);
+        return $total;
     }
 
     /**

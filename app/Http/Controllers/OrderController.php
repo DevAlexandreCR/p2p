@@ -6,6 +6,7 @@ use App\Decorators\OrderDecorator;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -38,11 +39,11 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @param User $user
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request, User $user): RedirectResponse
     {
-        //
+        return $this->orders->store($request, $user);
     }
 
     /**
@@ -64,10 +65,14 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @param Order $order
-     * @return Response
+     * @return Renderable
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, Order $order): Renderable
     {
-        //
+        $message = $this->orders->update($request, $order);
+
+        return view('home.users.orders.show', [
+            'order' => $order->refresh()
+        ])->with('success', $message);
     }
 }

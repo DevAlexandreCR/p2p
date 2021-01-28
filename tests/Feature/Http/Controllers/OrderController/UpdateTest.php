@@ -5,13 +5,14 @@ namespace Tests\Feature\Http\Controllers\OrderController;
 
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
-class ShowTest extends BaseControllerTest
+class UpdateTest extends BaseControllerTest
 {
 
-    private $order;
+    public Order $order;
 
     protected function setUp(): void
     {
@@ -19,34 +20,35 @@ class ShowTest extends BaseControllerTest
         $this->order = Order::factory()->create([
             'user_id' => $this->admin->id
         ]);
+        Product::factory(3)->create()->each(function ($product){
+            $product->order()->attach($this->order->id, [
+                'quantity' => 1
+            ]);
+        });
     }
     /**
-     * Test an user without permissions can't execute this action.
-     *
-     * @return void
+     * @inheritDoc
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
         $response = $this->actingAs($this->admin)
-            ->get(route('users.orders.show', [$this->admin->id, $this->order->id]));
+            ->get(route('users.orders.update', [$this->admin->id, $this->order->id]));
 
         $response
-            ->assertStatus(200)
-            ->assertViewIs('home.users.orders.show')
-            ->assertViewHas('order');
+            ->assertStatus(302);
+
+        $this->assertDatabaseCount('orders', 1);
     }
 
     /**
-     * Test an user without permissions can't execute this action.
-     *
-     * @return void
+     * @inheritDoc
      */
     public function testAnUserWithoutPermissionsCannotExecuteThisAction()
     {
         $anotherUser = User::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->get(route('users.orders.show', [$anotherUser->id, $this->order->id]));
+            ->get(route('users.orders.update', [$anotherUser->id, $this->order->id]));
 
         $response
             ->assertStatus(403)
@@ -54,13 +56,11 @@ class ShowTest extends BaseControllerTest
     }
 
     /**
-     * Test user unauthenticated is redirected to Login.
-     *
-     * @return void
+     * @inheritDoc
      */
     public function testAnUserUnauthenticatedIsRedirectedToLogin()
     {
-        $response = $this->get(route('users.orders.show', [$this->admin->id, $this->order->id]));
+        $response = $this->get(route('users.orders.update', [$this->admin->id, $this->order->id]));
 
         $response
             ->assertStatus(302)

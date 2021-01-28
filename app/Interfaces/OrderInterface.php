@@ -25,9 +25,10 @@ interface OrderInterface
 
     /**
      * @param Request $request
+     * @param User $user
      * @return mixed
      */
-    public function store(Request $request);
+    public function store(Request $request, User $user);
 
     /**
      * @param Request $request
