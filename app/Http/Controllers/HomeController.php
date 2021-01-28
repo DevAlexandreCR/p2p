@@ -10,7 +10,7 @@ use Illuminate\Contracts\Support\Renderable;
 class HomeController extends Controller
 {
 
-    private $products;
+    private ProductDecorator $products;
 
     /**
      * Create a new controller instance.
