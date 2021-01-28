@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
@@ -19,10 +20,17 @@ class ProductFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'name' => $name = $this->faker->unique()->firstName,
+            'reference' => $this->faker->unique()->numerify('#####'),
+            'slug' => Str::slug($name),
+            'description' => $this->faker->sentence(),
+            'stock' => $this->faker->numberBetween(1,5),
+            'price' => $this->faker->numberBetween(10000, 50000),
+            'image' => 'default.png',
+            'enabled' => true
         ];
     }
 }

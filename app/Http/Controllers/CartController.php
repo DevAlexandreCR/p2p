@@ -2,84 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use Illuminate\Http\Request;
+use App\Decorators\CartDecorator;
+use App\Http\Requests\Carts\DeleteRequest;
+use App\Http\Requests\Carts\StoreRequest;
+use App\Http\Requests\Carts\UpdateRequest;
+use App\Models\User;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    private CartDecorator $carts;
+
+    public function __construct(CartDecorator $carts)
     {
-        //
+        $this->authorizeResource(User::class);
+        $this->carts = $carts;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->store($request, $user);
+
+        return back()->with('success', trans('products.added'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return Renderable
      */
-    public function show(Cart $cart)
+    public function show(User $user): Renderable
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
+        return view('home.users.cart', [
+            'user' => $this->carts->show($user)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
+     * @param UpdateRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function update(Request $request, Cart $cart)
+    public function update(UpdateRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->update($request, $user);
+
+        return redirect(route('cart.show', $user->id))
+            ->with('success', trans('resources.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
+     * @param DeleteRequest $request
+     * @param User $user
+     * @return RedirectResponse
      */
-    public function destroy(Cart $cart)
+    public function destroy(DeleteRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->carts->delete($request, $user);
+
+        return back()->with('success', trans('resources.removed'));
     }
 }

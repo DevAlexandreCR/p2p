@@ -1,32 +1,29 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import Vue from 'vue'
+import './bootstrap'
+import ToastComponent from './components/ToastComponent'
+import ButtonToggleComponent from './components/ButtonToggleComponent'
+import InputImageComponent from './components/InputImageComponent'
+import ProductModalComponent from './components/ProductModalComponent'
+import UserModalComponent from './components/UserModalComponent'
+import SelectStockComponent from './components/SelectStockComponent'
+import SelectQuantityComponent from './components/SelectQuantityComponent'
+import OrderByComponent from './components/OrderByComponent'
+import SwitchComponent from './components/SwitchComponent'
+import BackButtonComponent from './components/BackButtonComponent'
 
-require('./bootstrap');
+window.Vue = Vue
 
-window.Vue = require('vue').default;
+Vue.component('toast-component', ToastComponent)
+Vue.component('button-toggle-component', ButtonToggleComponent)
+Vue.component('input-image-component', InputImageComponent)
+Vue.component('product-modal-component', ProductModalComponent)
+Vue.component('user-modal-component', UserModalComponent)
+Vue.component('select-stock-component', SelectStockComponent)
+Vue.component('select-quantity-component', SelectQuantityComponent)
+Vue.component('order-by-component', OrderByComponent)
+Vue.component('switch-component', SwitchComponent)
+Vue.component('back-button-component', BackButtonComponent)
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app',
-});
+new Vue({
+  el: '#app'
+})

@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\Roles;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Spatie\Permission\Models\Role;
 
 class LoginController extends Controller
 {
@@ -18,7 +24,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -36,5 +41,17 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * @param Request $request
+     * @param $user
+     * @return Application|RedirectResponse|Redirector|void
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->hasAnyRole(Role::all('name')->toArray())) {
+            return redirect(route('dashboard'));
+        }
     }
 }
