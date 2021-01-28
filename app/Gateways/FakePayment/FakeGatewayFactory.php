@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Gateways\FakePayment;
-
 
 use App\Gateways\GatewayInterface;
 use App\Gateways\PaymentGatewayFactory;

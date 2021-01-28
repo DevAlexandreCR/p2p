@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Gateways\PlaceToPay;
-
 
 use App\Constants\Orders;
 use App\Constants\PaymentGateway;
@@ -47,9 +45,7 @@ class PlaceToPay implements GatewayInterface
             )->object();
 
             return $this->createPayment($response, $order, $this->gateway);
-
         } catch (ClientException | ServerException $e) {
-
             Payment::create([
                 'order_id' => $order->id,
                 'status'   => Statuses::STATUS_FAILED
@@ -57,7 +53,6 @@ class PlaceToPay implements GatewayInterface
 
             return redirect()->to(route('users.orders.show', [auth()->id(), $order->id]))
                 ->with('message', $e->getMessage());
-
         }
     }
 
@@ -78,7 +73,7 @@ class PlaceToPay implements GatewayInterface
             )->object();
             $this->updatePayment($response, $payment);
             return $response->status->status;
-        }catch (ClientException | ServerException $e) {
+        } catch (ClientException | ServerException $e) {
             return $e->getMessage();
         }
     }
@@ -98,12 +93,9 @@ class PlaceToPay implements GatewayInterface
 
             $this->updatePayment($response, $payment);
             return redirect()->away($response->processUrl)->send();
-
         } catch (ClientException | ServerException $e) {
-
             return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
                 ->with('message', $e->getMessage());
-
         }
     }
 
@@ -127,7 +119,7 @@ class PlaceToPay implements GatewayInterface
             $this->updatePayment($response, $payment);
 
             $message = $response->status->message;
-        }catch (ClientException | ServerException $e) {
+        } catch (ClientException | ServerException $e) {
             $message = $e->getMessage();
         }
         return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
@@ -209,7 +201,7 @@ class PlaceToPay implements GatewayInterface
                 $payment->update([
                     'status' => $status === 'OK' ? Statuses::STATUS_PENDING : $status
                 ]);
-                 break;
+                break;
         }
     }
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Constants;
-
 
 use App\Gateways\FakePayment\FakeGatewayFactory;
 use App\Gateways\PlaceToPay\PlaceToPayGatewayFactory;
