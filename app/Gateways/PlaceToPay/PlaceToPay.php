@@ -43,7 +43,7 @@ class PlaceToPay implements GatewayInterface
                 $this->baseUrl . $this->endPoint,
                 $this->data($order)
             )->object();
-
+            logger()->channel('daily')->debug(json_encode($response));
             return $this->createPayment($response, $order, $this->gateway);
         } catch (ClientException | ServerException $e) {
             Payment::create([
@@ -71,6 +71,7 @@ class PlaceToPay implements GatewayInterface
                     'auth' => $this->getAuth(),
                 ]
             )->object();
+            logger()->channel('daily')->debug(json_encode($response));
             $this->updatePayment($response, $payment);
             return $response->status->status;
         } catch (ClientException | ServerException $e) {
@@ -90,6 +91,7 @@ class PlaceToPay implements GatewayInterface
                 $this->baseUrl . $this->endPoint,
                 $this->data($payment->order)
             )->object();
+            logger()->channel('daily')->debug(json_encode($response));
             $this->updatePayment($response, $payment);
             return redirect()->away($response->processUrl)->send();
         } catch (ClientException | ServerException $e) {
@@ -114,7 +116,7 @@ class PlaceToPay implements GatewayInterface
 
                 ]
             )->object();
-
+            logger()->channel('daily')->debug(json_encode($response));
             $this->updatePayment($response, $payment);
 
             $message = $response->status->message;
