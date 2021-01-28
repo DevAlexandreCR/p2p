@@ -58,6 +58,11 @@
                             </i>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('users.orders.index', auth()->user()) }}">
+                            <i class="bi bi-tags-fill"></i>
+                        </a>
+                    </li>
                 @endguest
             </ul>
         </div>

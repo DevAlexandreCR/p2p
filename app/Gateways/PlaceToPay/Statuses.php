@@ -13,4 +13,5 @@ class Statuses extends Enum
     public const STATUS_REJECTED = 'REJECTED';
     public const STATUS_PENDING_VALIDATION = 'PENDING_VALIDATION';
     public const STATUS_REFUNDED = 'REFUNDED';
+    public const STATUS_OK = 'OK';
 }

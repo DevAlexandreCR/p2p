@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 
 class PermissionController extends Controller
 {
-    private $users;
+    private UserInterface $users;
 
     public function __construct(UserInterface $users)
     {

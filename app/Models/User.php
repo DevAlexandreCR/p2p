@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class)->select('user_id', 'status', 'amount', 'created_at');
+        return $this->hasMany(Order::class)->select('id', 'user_id', 'status', 'amount', 'created_at');
     }
 
     /**

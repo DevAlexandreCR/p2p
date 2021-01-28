@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Orders;
 use App\Decorators\OrderDecorator;
 use App\Models\Order;
 use App\Models\User;
@@ -13,7 +14,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
 
-    private $orders;
+    private OrderDecorator $orders;
 
     public function __construct(OrderDecorator $orders)
     {
@@ -55,6 +56,10 @@ class OrderController extends Controller
      */
     public function show(User $user, Order $order): Renderable
     {
+        if ($order->status === Orders::STATUS_PENDING) {
+            $this->orders->update($order);
+        }
+
         return view('home.users.orders.show', [
             'order' => $this->orders->show($order)
         ]);

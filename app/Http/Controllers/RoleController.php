@@ -13,8 +13,8 @@ use Spatie\Permission\Models\Role;
 class RoleController extends Controller
 {
 
-    private $roles;
-    private $permissions;
+    private RoleInterface $roles;
+    private PermissionInterface $permissions;
 
     public function __construct(RoleInterface $roles, PermissionInterface $permissions)
     {
