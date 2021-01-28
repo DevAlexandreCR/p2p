@@ -5,10 +5,5 @@
         <a class="list-group-item list-group-item-action bg-light" href="{{route('users.index')}}">{{trans('Users')}}</a>
         <a class="list-group-item list-group-item-action bg-light"
            href="{{route('products.index', ['admin' => true])}}">{{trans('fields.products')}}</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
     </div>
 </div>
