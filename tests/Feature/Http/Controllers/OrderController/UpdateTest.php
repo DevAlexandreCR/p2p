@@ -35,9 +35,9 @@ class UpdateTest extends BaseControllerTest
             ->get(route('users.orders.update', [$this->admin->id, $this->order->id]));
 
         $response
-            ->assertStatus(302);
-
-        $this->assertDatabaseCount('orders', 1);
+            ->assertStatus(200)
+            ->assertViewIs('home.users.orders.show')
+            ->assertViewHas('order');
     }
 
     /**

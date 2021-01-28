@@ -42,23 +42,22 @@ class PlaceToPay implements GatewayInterface
                 $this->data($order)
             )->object();
 
-            $requestId = $response->requestId;
-            $processUrl = $response->processUrl;
-
-            Payment::create([
-                'order_id'   => $order->id,
-                'requestId'  => $requestId,
-                'processUrl' => $processUrl,
-                'amount'     => $order->amount
-            ]);
-
-            return redirect()->away($processUrl)->send();
+            return $this->createPayment($response, $order);
 
         } catch (ClientException | ServerException $e) {
-            $payment = Payment::create($order->id, null, null);
-            $payment->status = Statuses::STATUS_FAILED;
-            return redirect()->to(route('user.order.show', [auth()->id(), $order->refresh()->id]))
+
+            Payment::create([
+                'order_id' => $order->id,
+                'status'   => Statuses::STATUS_FAILED
+            ]);
+
+            $order->update([
+                'status'   => Statuses::STATUS_FAILED
+            ]);
+
+            return redirect()->to(route('users.orders.show', [auth()->id(), $order->id]))
                 ->with('message', $e->getMessage());
+
         }
     }
 
@@ -88,19 +87,43 @@ class PlaceToPay implements GatewayInterface
     /**
      * @param Payment $payment
      * @return RedirectResponse
+     * @throws Exception
      */
     public function retry(Payment $payment): RedirectResponse
     {
-        // TODO: Implement retry() method.
+
     }
 
     /**
      * @param Payment $payment
      * @return RedirectResponse
+     * @throws Exception
      */
     public function reverse(Payment $payment): RedirectResponse
     {
-        // TODO: Implement reverse() method.
+        try {
+            $response = Http::post(
+                $this->baseUrl . $this->reverseEndPoint,
+                [
+                    'auth' => $this->getAuth(),
+                    'internalReference' => $payment->reference,
+
+                ]
+            )->object();
+
+
+            return $this->createPayment($response, $payment->order);
+        }catch (ClientException | ServerException $e) {
+            Payment::update([
+                'status'   => Statuses::STATUS_FAILED
+            ]);
+
+            $payment->order()->update([
+                'status' => Statuses::STATUS_FAILED
+            ]);
+            return redirect()->to(route('user.order.show', [auth()->id(), $payment->order->id]))
+                ->with('message', $e->getMessage());
+        }
     }
 
     /**
@@ -173,5 +196,20 @@ class PlaceToPay implements GatewayInterface
                 $payment->order->products()->dettach();
                 break;
         }
+    }
+
+    private function createPayment($response, Order $order): RedirectResponse
+    {
+        $requestId = $response->requestId;
+        $processUrl = $response->processUrl;
+
+        Payment::create([
+            'order_id'   => $order->id,
+            'requestId'  => $requestId,
+            'processUrl' => $processUrl,
+            'amount'     => $order->amount
+        ]);
+
+        return redirect()->away($processUrl)->send();
     }
 }
