@@ -3,7 +3,7 @@
 @section('main')
     <div class="container">
         <div class="card m-auto col-lg-6">
-            <div class="card-header">{{trans('fields.created')}}</div>
+            <div class="card-header">{{trans('fields.product')}}</div>
             <form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">

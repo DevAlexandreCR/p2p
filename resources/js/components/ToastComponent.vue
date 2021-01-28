@@ -22,7 +22,7 @@ export default {
         progressBar: true,
         preventDuplicates: false,
         newestOnTop: true,
-        positionClass: 'toast-top-full-width',
+        positionClass: 'toast-top-right',
         showEasing: 'swing',
         hideEasing: 'linear',
         showMethod: 'fadeIn',
