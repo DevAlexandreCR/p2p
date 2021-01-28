@@ -40,9 +40,9 @@ class PlaceToPay implements GatewayInterface
      */
     public function create(Order $order): RedirectResponse
     {
-        $response = $this->makeRequest('POST',$this->baseUrl . $this->endPoint, $this->data($order));
+        $response = $this->makeRequest('POST', $this->baseUrl . $this->endPoint, $this->data($order));
 
-        if($response->status->status === Statuses::STATUS_OK) {
+        if ($response->status->status === Statuses::STATUS_OK) {
             return $this->createPayment($response, $order, $this->gateway);
         }
         Payment::create([
@@ -62,7 +62,7 @@ class PlaceToPay implements GatewayInterface
     {
         $url = $this->baseUrl . $this->endPoint . $payment->request_id;
 
-        $response = $this->makeRequest('POST',$url, ['auth' => $this->getAuth()]);
+        $response = $this->makeRequest('POST', $url, ['auth' => $this->getAuth()]);
 
         logger()->channel('daily')->debug(json_encode($response));
 
@@ -80,13 +80,13 @@ class PlaceToPay implements GatewayInterface
     {
         $url = $this->baseUrl . $this->endPoint;
 
-        $response = $this->makeRequest('POST',$url,  $this->data($payment->order));
+        $response = $this->makeRequest('POST', $url, $this->data($payment->order));
 
         logger()->channel('daily')->debug(json_encode($response));
 
         $this->updatePayment($response, $payment);
 
-        if($response->status->status === Statuses::STATUS_OK) {
+        if ($response->status->status === Statuses::STATUS_OK) {
             return redirect()->away($response->processUrl)->send();
         }
 
@@ -103,7 +103,7 @@ class PlaceToPay implements GatewayInterface
     {
         $url = $this->baseUrl . $this->reverseEndPoint;
 
-        $response = $this->makeRequest('POST',$url, [
+        $response = $this->makeRequest('POST', $url, [
             'auth' => $this->getAuth(),
             'internalReference' => $payment->reference
         ]);

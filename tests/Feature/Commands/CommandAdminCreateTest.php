@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class CommandAdminCreateTest extends TestCase
 {
-
     use RefreshDatabase;
 
     protected function setUp(): void

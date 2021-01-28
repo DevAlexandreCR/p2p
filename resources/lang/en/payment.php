@@ -17,12 +17,14 @@ return [
         "rejected" => "Your transaction  has been declined, you can try another payment method.",
         "retry_again" => "Or you can retry the payment again.",
         "reversed" => "Your payment has been reversed success.",
-        "shipped" => "Your order has been shipped."
+        "shipped" => "Your order has been shipped.",
+        "gateway_not_configured" => "Payment gateway not configured"
     ],
     "method" => "Method",
     "paid" => "Paid",
     "pay" => "Proceed to payment",
     "payment" => "Payment",
     "retry" => "Retry",
-    "verify" => "Verify payment"
+    "verify" => "Verify payment",
+    "select" => "Select payment gateway"
 ];

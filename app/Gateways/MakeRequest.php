@@ -2,20 +2,15 @@
 
 declare(strict_types=1);
 
-
 namespace App\Gateways;
-
 
 use Illuminate\Support\Facades\Http;
 
 trait MakeRequest
 {
-    public function makeRequest($method, $requestUrl, $queryParameters = []): object
+    public function makeRequest(string $method, string $requestUrl, array $data = []): object
     {
-        if (method_exists($this, 'resolveAuthorization')) {
-            $this->resolveAuthorization($queryParameters);
-        }
-        $response = Http::asJson()->$method($requestUrl, $queryParameters);
+        $response = Http::asJson()->$method($requestUrl, $data);
 
         return $response->object();
     }

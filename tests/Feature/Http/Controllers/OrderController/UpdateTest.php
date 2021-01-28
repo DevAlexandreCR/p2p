@@ -42,7 +42,7 @@ class UpdateTest extends BaseControllerTest
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
             'amount'   => $this->order->amount,
             'status'   => Statuses::STATUS_PENDING,
-            'request_id'=> $requestId = 123456
+            'request_id' => $requestId = 123456
         ]);
 
         Http::fake([
@@ -108,9 +108,9 @@ class UpdateTest extends BaseControllerTest
         return [
             'status' => [
                 'status' => Statuses::STATUS_APPROVED,
-                'message'=> Statuses::STATUS_APPROVED
+                'message' => Statuses::STATUS_APPROVED
             ],
-            'request'=> [
+            'request' => [
                 'payer' => [
                     'document' => '12345678',
                     'documentType' => 'CC',

@@ -13,6 +13,16 @@ use Tests\Feature\Http\Controllers\BaseControllerTest;
 class StoreTest extends BaseControllerTest
 {
 
+    public function testAnUserCanSelectAnotherPaymentGateway()
+    {
+        $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id), [
+            'gateway_name' => PaymentGateway::FAKE_PAYMENT
+        ]);
+
+        $response
+            ->assertStatus(302)
+            ->assertSessionHas('message', trans('payment.messages.gateway_not_configured'));
+    }
     /**
      * Test an user without permissions can't execute this action.
      *
@@ -54,7 +64,7 @@ class StoreTest extends BaseControllerTest
 
         $this->assertDatabaseHas('payments', [
             'request_id' => $requestId,
-            'process_url'=> $processUrl
+            'process_url' => $processUrl
         ]);
     }
 

@@ -39,7 +39,7 @@ class RetryTest extends BaseControllerTest
         Http::fake([
             $url . 'api/session/' => Http::response(['status' => [
                 'status' => Statuses::STATUS_OK,
-                'message'=> $message = 'custom message'
+                'message' => $message = 'custom message'
             ],
                 'requestId' => $requestId = 12345,
                 'processUrl' => $processUrl = 'fakeUrl'])

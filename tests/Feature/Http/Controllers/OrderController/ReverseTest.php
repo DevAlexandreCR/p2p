@@ -38,7 +38,7 @@ class ReverseTest extends BaseControllerTest
         Http::fake([
             $url . 'api/reverse/' => Http::response(['status' => [
                 'status' => Statuses::STATUS_APPROVED,
-                'message'=> 'Se ha reversado el pago correctamente'
+                'message' => 'Se ha reversado el pago correctamente'
             ]])
         ]);
 
@@ -58,7 +58,7 @@ class ReverseTest extends BaseControllerTest
             ->assertStatus(302)
             ->assertRedirect(route('users.orders.show', [$this->admin->id, $this->order->id]));
 
-        $this->assertDatabaseHas('payments',[
+        $this->assertDatabaseHas('payments', [
             'id' => $payment->id,
             'status' => Statuses::STATUS_REFUNDED
         ]);
