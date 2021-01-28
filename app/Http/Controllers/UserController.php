@@ -15,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 class UserController extends Controller
 {
 
-    private $users;
+    private UserInterface $users;
 
     public function __construct(UserInterface $users)
     {

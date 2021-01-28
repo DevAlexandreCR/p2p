@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
 
-    private $orders;
+    private OrderDecorator $orders;
 
     public function __construct(OrderDecorator $orders)
     {

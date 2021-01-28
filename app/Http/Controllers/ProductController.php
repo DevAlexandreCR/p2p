@@ -13,7 +13,7 @@ use Illuminate\Http\RedirectResponse;
 class ProductController extends Controller
 {
 
-    private $products;
+    private ProductDecorator $products;
 
     public function __construct(ProductDecorator $products)
     {
