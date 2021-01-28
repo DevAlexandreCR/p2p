@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Http\Controllers\OrderController;
 
+use App\Constants\Orders;
 use App\Constants\PaymentGateway;
 use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class UpdateTest extends BaseControllerTest
@@ -32,20 +35,42 @@ class UpdateTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        Payment::create([
+        $url = config('gateways.placeToPay.baseUrl');
+
+        $payment = Payment::create([
             'order_id' => $this->order->id,
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
             'amount'   => $this->order->amount,
-            'status'   => Statuses::STATUS_APPROVED
+            'status'   => Statuses::STATUS_PENDING,
+            'request_id'=> $requestId = 123456
+        ]);
+
+        Http::fake([
+            $url . 'api/session/' . $requestId => Http::response($this->getPaymentResponse())
         ]);
 
         $response = $this->actingAs($this->admin)
             ->put(route('users.orders.update', [$this->admin->id, $this->order->id]));
 
+        Http::assertSent(function (Request $request) use ($url, $requestId) {
+            return $request->url() == $url . 'api/session/' . $requestId;
+        });
+
         $response
             ->assertStatus(302)
             ->assertRedirect(route('users.orders.show', [$this->admin->id, $this->order->id]))
             ->assertSessionHas('success');
+
+        $this
+            ->assertDatabaseHas('orders', [
+                'id' => $this->order->id,
+                'status' => Orders::STATUS_COMPLETED
+            ])
+            ->assertDatabaseHas('payments', [
+                'id' => $payment->id,
+                'status' => Statuses::STATUS_APPROVED
+            ])
+            ->assertDatabaseCount('payers', 1);
     }
 
     /**
@@ -73,5 +98,42 @@ class UpdateTest extends BaseControllerTest
         $response
             ->assertStatus(302)
             ->assertRedirect(route('login'));
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentResponse(): array
+    {
+        return [
+            'status' => [
+                'status' => Statuses::STATUS_APPROVED,
+                'message'=> Statuses::STATUS_APPROVED
+            ],
+            'request'=> [
+                'payer' => [
+                    'document' => '12345678',
+                    'documentType' => 'CC',
+                    'name' => 'Payer',
+                    'surname' => 'Abc',
+                    'email' => 'pepito@example.com',
+                    'mobile' => '3100000000'
+                ]
+            ],
+            'payment' => [
+                [
+                    'status' => [
+                        'status' => Statuses::STATUS_APPROVED,
+                    ],
+                    'internalReference' => '1234567890',
+                    'paymentMethod' => 'card',
+                    'processorFields' => [
+                        [
+                            'value' => '1111'
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

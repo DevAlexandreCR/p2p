@@ -3,13 +3,11 @@
 namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\PaymentGateway;
-use App\Gateways\GatewayInterface;
-use App\Gateways\MakeRequest;
-use App\Gateways\PlaceToPay\PlaceToPay;
-use App\Models\Order;
+use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Product;
 use App\Models\User;
-use Mockery\MockInterface;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class StoreTest extends BaseControllerTest
@@ -22,10 +20,15 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $this->withoutExceptionHandling();
-        $this->instance(GatewayInterface::class, function (MockInterface $mock) {
-            $mock->shouldReceive('create')->once();
-        });
+        $url = config('gateways.placeToPay.baseUrl');
+        Http::fake([
+            $url . 'api/session/' => Http::response(['status' => [
+                'status' => Statuses::STATUS_OK
+            ],
+                'requestId' => $requestId = 12345,
+                'processUrl' => $processUrl = 'fakeUrl'])
+        ]);
+
         $product = Product::factory()->create();
         $this->admin->cart->products()->attach($product->id, [
             'quantity' => 1
@@ -35,14 +38,24 @@ class StoreTest extends BaseControllerTest
             'gateway_name' => PaymentGateway::PLACE_TO_PAY
         ]);
 
+        Http::assertSent(function (Request $request) use ($url) {
+            return $request->url() == $url . 'api/session/';
+        });
+
         $response
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertRedirect($processUrl);
         $this
             ->assertDatabaseCount('orders', 1)
             ->assertDatabaseHas('order_product', [
                 'product_id' => $product->id,
-                'quantity'   => 1
+                'quantity'   => 1,
             ]);
+
+        $this->assertDatabaseHas('payments', [
+            'request_id' => $requestId,
+            'process_url'=> $processUrl
+        ]);
     }
 
     /**

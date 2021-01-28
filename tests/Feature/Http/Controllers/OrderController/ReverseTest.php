@@ -3,10 +3,13 @@
 namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\PaymentGateway;
+use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class ReverseTest extends BaseControllerTest
@@ -31,7 +34,15 @@ class ReverseTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        Payment::create([
+        $url = config('gateways.placeToPay.baseUrl');
+        Http::fake([
+            $url . 'api/reverse/' => Http::response(['status' => [
+                'status' => Statuses::STATUS_APPROVED,
+                'message'=> 'Se ha reversado el pago correctamente'
+            ]])
+        ]);
+
+        $payment = Payment::create([
             'order_id' => $this->order->id,
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
             'amount'   => $this->order->amount
@@ -39,9 +50,18 @@ class ReverseTest extends BaseControllerTest
         $response = $this->actingAs($this->admin)
             ->post(route('users.orders.reverse', [$this->admin->id, $this->order->id]));
 
+        Http::assertSent(function (Request $request) use ($url) {
+            return $request->url() == $url . 'api/reverse/';
+        });
+
         $response
             ->assertStatus(302)
             ->assertRedirect(route('users.orders.show', [$this->admin->id, $this->order->id]));
+
+        $this->assertDatabaseHas('payments',[
+            'id' => $payment->id,
+            'status' => Statuses::STATUS_REFUNDED
+        ]);
     }
 
     /**

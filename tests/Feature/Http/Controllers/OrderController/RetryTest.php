@@ -3,10 +3,13 @@
 namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\PaymentGateway;
+use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class RetryTest extends BaseControllerTest
@@ -32,18 +35,42 @@ class RetryTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        Payment::create([
+        $url = config('gateways.placeToPay.baseUrl');
+        Http::fake([
+            $url . 'api/session/' => Http::response(['status' => [
+                'status' => Statuses::STATUS_OK,
+                'message'=> $message = 'custom message'
+            ],
+                'requestId' => $requestId = 12345,
+                'processUrl' => $processUrl = 'fakeUrl'])
+        ]);
+
+        $payment = Payment::create([
             'order_id' => $this->order->id,
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
-            'amount'   => $this->order->amount
+            'amount'   => $this->order->amount,
+            'status'   => Statuses::STATUS_REJECTED
         ]);
+
         $response = $this->actingAs($this->admin)
             ->post(route('users.orders.retry', [$this->admin->id, $this->order->id]));
 
+        Http::assertSent(function (Request $request) use ($url) {
+            return $request->url() == $url . 'api/session/';
+        });
+
         $response
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertRedirect($processUrl);
+
         $this
-            ->assertDatabaseCount('order_product', 3);
+            ->assertDatabaseCount('order_product', 3)
+            ->assertDatabaseHas('payments', [
+                'id'     => $payment->id,
+                'status' => Statuses::STATUS_PENDING,
+                'process_url' => $processUrl,
+                'request_id'  => $requestId
+            ]);
     }
 
     /**

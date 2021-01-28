@@ -103,7 +103,10 @@ class PlaceToPay implements GatewayInterface
     {
         $url = $this->baseUrl . $this->reverseEndPoint;
 
-        $response = $this->makeRequest('POST',$url, ['auth' => $this->getAuth()]);
+        $response = $this->makeRequest('POST',$url, [
+            'auth' => $this->getAuth(),
+            'internalReference' => $payment->reference
+        ]);
 
         $this->updatePayment($response, $payment);
 
