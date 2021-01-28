@@ -4,6 +4,8 @@
 namespace App\Gateways\PlaceToPay;
 
 
+use App\Constants\Orders;
+use App\Constants\PaymentGateway;
 use App\Gateways\GatewayInterface;
 use App\Models\Order;
 use App\Models\Payer;
@@ -17,6 +19,8 @@ use Illuminate\Support\Facades\Http;
 class PlaceToPay implements GatewayInterface
 {
     use Authentication;
+
+    private string $gateway = PaymentGateway::PLACE_TO_PAY;
 
     private string $endPoint = 'api/session/';
 
@@ -42,16 +46,12 @@ class PlaceToPay implements GatewayInterface
                 $this->data($order)
             )->object();
 
-            return $this->createPayment($response, $order);
+            return $this->createPayment($response, $order, $this->gateway);
 
         } catch (ClientException | ServerException $e) {
 
             Payment::create([
                 'order_id' => $order->id,
-                'status'   => Statuses::STATUS_FAILED
-            ]);
-
-            $order->update([
                 'status'   => Statuses::STATUS_FAILED
             ]);
 
@@ -76,7 +76,6 @@ class PlaceToPay implements GatewayInterface
                     'auth' => $this->getAuth(),
                 ]
             )->object();
-
             $this->updatePayment($response, $payment);
             return $response->status->status;
         }catch (ClientException | ServerException $e) {
@@ -91,7 +90,21 @@ class PlaceToPay implements GatewayInterface
      */
     public function retry(Payment $payment): RedirectResponse
     {
+        try {
+            $response = Http::asJson()->post(
+                $this->baseUrl . $this->endPoint,
+                $this->data($payment->order)
+            )->object();
 
+            $this->updatePayment($response, $payment);
+            return redirect()->away($response->processUrl)->send();
+
+        } catch (ClientException | ServerException $e) {
+
+            return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
+                ->with('message', $e->getMessage());
+
+        }
     }
 
     /**
@@ -111,15 +124,10 @@ class PlaceToPay implements GatewayInterface
                 ]
             )->object();
 
-
-            return $this->createPayment($response, $payment->order);
+            return $this->createPayment($response, $payment->order, $this->gateway);
         }catch (ClientException | ServerException $e) {
-            Payment::update([
+            $payment->update([
                 'status'   => Statuses::STATUS_FAILED
-            ]);
-
-            $payment->order()->update([
-                'status' => Statuses::STATUS_FAILED
             ]);
             return redirect()->to(route('user.order.show', [auth()->id(), $payment->order->id]))
                 ->with('message', $e->getMessage());
@@ -164,16 +172,10 @@ class PlaceToPay implements GatewayInterface
     {
         $status = $response->status->status;
 
-        $payment::update([
-            'status' => $status
-        ]);
-
-        $payment->order()->update([
-            'status' => $status
-        ]);
-
         switch ($status) {
             case Statuses::STATUS_APPROVED:
+                $requestId = $response->requestId;
+                $processUrl = $response->processUrl;
                 $payer = $response->request->payer;
                 $dbPayer = Payer::create(
                     [
@@ -185,29 +187,43 @@ class PlaceToPay implements GatewayInterface
                         'phone'         => $payer->mobile,
                     ]
                 );
-                $payment::update([
-                    'payer_id'  => $dbPayer->id,
-                    'reference' => $response->payment[0]->internalReference,
-                    'method'    => $response->payment[0]->paymentMethod,
-                    'last_digit'=> $response->payment[0]->processorFields[0]->value
+                $payment->update([
+                    'request_id'  => $requestId,
+                    'process_url' => $processUrl,
+                    'payer_id'   => $dbPayer->id,
+                    'reference'  => $response->payment[0]->internalReference,
+                    'method'     => $response->payment[0]->paymentMethod,
+                    'last_digit' => $response->payment[0]->processorFields[0]->value
+                ]);
+                $payment->order()->update([
+                    'status' => Orders::STATUS_COMPLETED
                 ]);
                 break;
             case Statuses::STATUS_REFUNDED:
                 $payment->order->products()->dettach();
+                $payment->order()->update([
+                    'status' => Orders::STATUS_CANCELED
+                ]);
                 break;
+            default:
+                $payment->update([
+                    'status' => $status === 'OK' ? Statuses::STATUS_PENDING : $status
+                ]);
+                 break;
         }
     }
 
-    private function createPayment($response, Order $order): RedirectResponse
+    private function createPayment($response, Order $order, string $gateway): RedirectResponse
     {
         $requestId = $response->requestId;
         $processUrl = $response->processUrl;
 
         Payment::create([
             'order_id'   => $order->id,
-            'requestId'  => $requestId,
-            'processUrl' => $processUrl,
-            'amount'     => $order->amount
+            'request_id'  => $requestId,
+            'process_url' => $processUrl,
+            'amount'     => $order->amount,
+            'gateway'    => $gateway
         ]);
 
         return redirect()->away($processUrl)->send();

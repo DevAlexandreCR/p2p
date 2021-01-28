@@ -6,7 +6,6 @@ namespace App\Interfaces;
 
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 interface OrderInterface
@@ -31,9 +30,14 @@ interface OrderInterface
     public function store(Request $request, User $user);
 
     /**
-     * @param Request $request
-     * @param Model $model
+     * @param Order $order
      * @return mixed
      */
-    public function update(Request $request, Model $model);
+    public function update(Order $order);
+
+    /**
+     * @param Order $order
+     * @return mixed
+     */
+    public function retry(Order $order);
 }

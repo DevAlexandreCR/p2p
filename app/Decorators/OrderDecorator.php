@@ -8,7 +8,6 @@ use App\Constants\PaymentGateway;
 use App\Interfaces\OrderInterface;
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -65,19 +64,31 @@ class OrderDecorator implements OrderInterface
     }
 
     /**
-     * @param Request $request
-     * @param Model $model
+     * @param Order $order
      * @return mixed
      */
-    public function update(Request $request, Model $model)
+    public function update(Order $order)
     {
         Cache::tags('users.orders')->flush();
 
-        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$request->input('gateway_name')];
+        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$order->payments()->first()->gateway];
 
         $payment = (new $paymentGateway)->create();
 
-        return $payment->getInformation($model);
+        return $payment->getInformation($order->payments()->first());
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function retry(Order $order)
+    {
+        Cache::tags('users.orders')->flush();
+
+        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$order->payments()->first()->gateway];
+
+        $payment = (new $paymentGateway)->create();
+
+        return $payment->retry($order->payments()->first());
+    }
 }

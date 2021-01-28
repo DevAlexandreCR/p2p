@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Decorators\OrderDecorator;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,16 +63,28 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param User $user
      * @param Order $order
-     * @return Renderable
+     * @return RedirectResponse
      */
-    public function update(Request $request, Order $order): Renderable
+    public function update(User $user, Order $order): RedirectResponse
     {
-        $message = $this->orders->update($request, $order);
+        $message = $this->orders->update($order);
 
-        return view('home.users.orders.show', [
-            'order' => $order->refresh()
-        ])->with('success', $message);
+        return redirect(route('users.orders.show', [$user->id, $order->id]))
+            ->with('success', $message);
+    }
+
+    /**
+     * @param User $user
+     * @param Order $order
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function retry(User $user, Order $order): RedirectResponse
+    {
+        $this->authorize('update', $order);
+
+        return $this->orders->retry($order);
     }
 }

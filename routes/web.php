@@ -40,5 +40,6 @@ Route::middleware('auth')->prefix('user')->group(function() {
     Route::delete('/{user}/cart/delete', [CartController::class, 'destroy'])->name('cart.delete');
     Route::post('/{user}/cart/store', [CartController::class, 'store'])->name('cart.store');
 
-    Route::resource('users.orders', OrderController::class)->except('edit', 'create');
+    Route::resource('users.orders', OrderController::class)->except('edit', 'create', 'destroy');
+    Route::post('/{user}/orders/{order}/retry', [OrderController::class, 'retry'])->name('users.orders.retry');
 });

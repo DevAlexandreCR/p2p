@@ -11,7 +11,7 @@ use App\Models\Product;
 use App\Models\User;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
-class UpdateTest extends BaseControllerTest
+class RetryTest extends BaseControllerTest
 {
 
     public Order $order;
@@ -28,6 +28,7 @@ class UpdateTest extends BaseControllerTest
             ]);
         });
     }
+
     /**
      * @inheritDoc
      */
@@ -38,14 +39,13 @@ class UpdateTest extends BaseControllerTest
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
             'amount'   => $this->order->amount
         ]);
-
         $response = $this->actingAs($this->admin)
-            ->put(route('users.orders.update', [$this->admin->id, $this->order->id]));
+            ->post(route('users.orders.retry', [$this->admin->id, $this->order->id]));
 
         $response
-            ->assertStatus(302)
-            ->assertRedirect(route('users.orders.show',[$this->admin->id, $this->order->id]))
-            ->assertSessionHas('success');
+            ->assertStatus(302);
+        $this
+            ->assertDatabaseCount('order_product', 3);
     }
 
     /**
@@ -56,7 +56,7 @@ class UpdateTest extends BaseControllerTest
         $anotherUser = User::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->put(route('users.orders.update', [$anotherUser->id, $this->order->id]));
+            ->post(route('users.orders.retry', [$anotherUser->id, $this->order->id]));
 
         $response
             ->assertStatus(403)
@@ -68,7 +68,7 @@ class UpdateTest extends BaseControllerTest
      */
     public function testAnUserUnauthenticatedIsRedirectedToLogin()
     {
-        $response = $this->put(route('users.orders.update', [$this->admin->id, $this->order->id]));
+        $response = $this->post(route('users.orders.retry', [$this->admin->id, $this->order->id]));
 
         $response
             ->assertStatus(302)
