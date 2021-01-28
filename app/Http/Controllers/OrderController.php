@@ -2,38 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Decorators\OrderDecorator;
 use App\Models\Order;
+use App\Models\User;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    private $orders;
+
+    public function __construct(OrderDecorator $orders)
     {
-        //
+        $this->authorizeResource(Order::class);
+        $this->orders = $orders;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return Renderable
      */
-    public function create()
+    public function index(User $user):  Renderable
     {
-        //
+        return view('home.users.orders.index', [
+            'orders' => $this->orders->all($user)
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param User $user
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
         //
     }
@@ -41,44 +48,25 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @param Order $order
+     * @return Renderable
      */
-    public function show(Order $order)
+    public function show(User $user, Order $order): Renderable
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
+        return view('home.users.orders.show', [
+            'order' => $this->orders->show($order)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Order $order
+     * @return Response
      */
     public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
     {
         //
     }
