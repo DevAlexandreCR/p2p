@@ -16,3 +16,4 @@ yarn-error.log
 /public/css/
 /public/fonts/
 /public/js/
+.env.testing
