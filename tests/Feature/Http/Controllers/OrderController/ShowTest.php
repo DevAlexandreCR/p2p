@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\OrderController;
 
+use App\Constants\Orders;
 use App\Constants\PaymentGateway;
 use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
@@ -28,6 +29,7 @@ class ShowTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
+        $this->order->update(['status' => Orders::STATUS_COMPLETED]);
         Payment::create([
             'order_id' => $this->order->id,
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
