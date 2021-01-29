@@ -32,7 +32,7 @@ script:
   - composer phpcs-auto-check-project
   - npm run lint-check
   - composer phpstan
-  - phpunit
+  - php artisan test
 
 notifications:
   email:
