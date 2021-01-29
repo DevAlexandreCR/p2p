@@ -1,6 +1,6 @@
 # P2P
 
-P2P is an online store developed with PHP 7.4, Laravel 7+ and Vue 2.
+P2P is an online store developed with PHP 7.4, Laravel 8 and Vue 2.
 
 ### Features
 
