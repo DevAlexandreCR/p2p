@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Actions;
-
 
 use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
@@ -31,7 +29,7 @@ class CreateOrderAction
 
         Payment::updateOrCreate([
             'order_id' => $order->id
-        ],[
+        ], [
             'status' => Statuses::STATUS_PENDING,
             'gateway'  => $gateway,
             'amount'   => $order->amount

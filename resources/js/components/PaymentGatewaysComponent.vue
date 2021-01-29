@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "PaymentGatewaysComponent",
+  name: 'PaymentGatewaysComponent',
   props: {
     inputId: {
       type: String,
@@ -29,7 +29,7 @@ export default {
     }
   },
   methods: {
-    selectGateway: function(gateway) {
+    selectGateway: function (gateway) {
       document.getElementById(this.inputId).value = gateway
       document.getElementById(this.formId).submit()
     }

@@ -90,7 +90,7 @@ class OrderController extends Controller
      */
     public function retry(RetryRequest $request, User $user, Order $order): RedirectResponse
     {
-        return $this->orders->retry($request,$order);
+        return $this->orders->retry($request, $order);
     }
 
     /**
