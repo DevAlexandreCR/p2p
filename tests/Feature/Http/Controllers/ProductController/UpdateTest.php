@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\ProductController;
 
 use App\Constants\Permissions;
 use App\Models\Product;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

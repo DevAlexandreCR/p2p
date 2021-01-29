@@ -3,10 +3,8 @@
         @case(\App\Gateways\PlaceToPay\Statuses::STATUS_FAILED)
             <p><small>{{session('message')}}</small></p>
             <p><small>{{trans('payment.messages.failed')}}</small></p>
-            <form action="{{route('users.orders.retry', [auth()->id(), $payment->order->id])}}" method="post">
-                @csrf
-                <button type="submit" class="btn w-100 btn-sm btn-success">{{trans('payment.retry')}}</button>
-            </form>
+        <button type="button" class="btn btn-success btn-sm me-2 w-100" data-bs-toggle="modal"
+                data-bs-target="#retry-modal">{{trans('payment.retry')}}</button>
         @break
         @case(\App\Gateways\PlaceToPay\Statuses::STATUS_PENDING)
             <p><small>{{trans('payment.messages.pending')}}</small></p>
@@ -85,10 +83,8 @@
         @break
         @case(\App\Gateways\PlaceToPay\Statuses::STATUS_REJECTED)
             <p><small>{{trans('payment.messages.rejected')}}</small></p>
-            <form action="{{route('users.orders.retry', [auth()->id(), $payment->order->id])}}" method="post">
-                @csrf
-                <button type="submit" class="btn w-100 btn-sm btn-success">{{trans('payment.retry')}}</button>
-            </form>
+        <button type="button" class="btn btn-success btn-sm me-2 w-100" data-bs-toggle="modal"
+                data-bs-target="#retry-modal">{{trans('payment.retry')}}</button>
         @break
         @case(\App\Gateways\PlaceToPay\Statuses::STATUS_REFUNDED)
             <p><small>{{trans('orders.statuses.canceled')}}</small></p>
@@ -128,4 +124,24 @@
             @endif
         @break
     @endswitch
+        <div class="modal fade" tabindex="-1" id="retry-modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ trans('payment.select') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <payment-gateway-component
+                                :input-id="'payment_gateway_retry'"
+                                :form-id="'form-payment_retry'"></payment-gateway-component>
+                    </div>
+                    <form class="btn-block" id="form-payment_retry" action="{{ route('users.orders.retry', [auth()->id(), $payment->order->id]) }}"  method="post">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{auth()->id()}}">
+                        <input type="hidden" name="gateway_name" id="payment_gateway_retry">
+                    </form>
+                </div>
+            </div>
+        </div>
 </div>

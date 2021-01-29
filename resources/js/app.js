@@ -10,6 +10,7 @@ import SelectQuantityComponent from './components/SelectQuantityComponent'
 import OrderByComponent from './components/OrderByComponent'
 import SwitchComponent from './components/SwitchComponent'
 import BackButtonComponent from './components/BackButtonComponent'
+import PaymentGatewaysComponent from './components/PaymentGatewaysComponent'
 
 window.Vue = Vue
 
@@ -23,6 +24,7 @@ Vue.component('select-quantity-component', SelectQuantityComponent)
 Vue.component('order-by-component', OrderByComponent)
 Vue.component('switch-component', SwitchComponent)
 Vue.component('back-button-component', BackButtonComponent)
+Vue.component('payment-gateway-component', PaymentGatewaysComponent)
 
 new Vue({
   el: '#app'

@@ -3,14 +3,26 @@
 namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\PaymentGateway;
-use App\Gateways\PlaceToPay\PlaceToPay;
+use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\Feature\Http\Controllers\BaseControllerTest;
 
 class StoreTest extends BaseControllerTest
 {
 
+    public function testAnUserCanSelectAnotherPaymentGateway()
+    {
+        $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id), [
+            'gateway_name' => PaymentGateway::FAKE_PAYMENT
+        ]);
+
+        $response
+            ->assertStatus(302)
+            ->assertSessionHas('message', trans('payment.messages.gateway_not_configured'));
+    }
     /**
      * Test an user without permissions can't execute this action.
      *
@@ -18,23 +30,42 @@ class StoreTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
-        $mock = $this->mock(PlaceToPay::class);
+        $url = config('gateways.placeToPay.baseUrl');
+        Http::fake([
+            $url . 'api/session/' => Http::response(['status' => [
+                'status' => Statuses::STATUS_OK
+            ],
+                'requestId' => $requestId = 12345,
+                'processUrl' => $processUrl = 'fakeUrl'])
+        ]);
+
         $product = Product::factory()->create();
         $this->admin->cart->products()->attach($product->id, [
             'quantity' => 1
         ]);
+
         $response = $this->actingAs($this->admin)->post(route('users.orders.store', $this->admin->id), [
             'gateway_name' => PaymentGateway::PLACE_TO_PAY
         ]);
-        $mock->shouldReceive('create');
+
+        Http::assertSent(function (Request $request) use ($url) {
+            return $request->url() == $url . 'api/session/';
+        });
+
         $response
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertRedirect($processUrl);
         $this
             ->assertDatabaseCount('orders', 1)
             ->assertDatabaseHas('order_product', [
                 'product_id' => $product->id,
-                'quantity'   => 1
+                'quantity'   => 1,
             ]);
+
+        $this->assertDatabaseHas('payments', [
+            'request_id' => $requestId,
+            'process_url' => $processUrl
+        ]);
     }
 
     /**

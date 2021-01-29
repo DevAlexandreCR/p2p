@@ -17,12 +17,14 @@ return [
         "rejected" => "Tu transacción ha sido rechazada, puedes intentar con otro método de pago.",
         "retry_again" => "O puedes reintentar el pago nuevamente.",
         "reversed" => "Tu pago a sido devuelto satisfactoriamente.",
-        "shipped" => "Tu orden ha sido enviada."
+        "shipped" => "Tu orden ha sido enviada.",
+        "gateway_not_configured" => "Pasarela de pagos no configurada"
     ],
     "method" => "Método de pago",
     "paid" => "Pagado",
     "pay" => "Procesar pago",
     "payment" => "Pago",
     "retry" => "Intentar de nuevo",
-    "verify" => "Verificar pago"
+    "verify" => "Verificar pago",
+    "select" => "Elige un metodo de pago"
 ];

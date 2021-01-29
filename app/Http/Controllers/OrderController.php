@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Constants\Orders;
 use App\Decorators\OrderDecorator;
+use App\Http\Requests\Orders\RetryRequest;
+use App\Http\Requests\Orders\StoreRequest;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -38,11 +40,11 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreRequest $request
      * @param User $user
      * @return RedirectResponse
      */
-    public function store(Request $request, User $user): RedirectResponse
+    public function store(StoreRequest $request, User $user): RedirectResponse
     {
         return $this->orders->store($request, $user);
     }
@@ -81,16 +83,14 @@ class OrderController extends Controller
     }
 
     /**
+     * @param RetryRequest $request
      * @param User $user
      * @param Order $order
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
-    public function retry(User $user, Order $order): RedirectResponse
+    public function retry(RetryRequest $request, User $user, Order $order): RedirectResponse
     {
-        $this->authorize('update', $order);
-
-        return $this->orders->retry($order);
+        return $this->orders->retry($request, $order);
     }
 
     /**
