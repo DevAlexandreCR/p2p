@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\OrderController;
 
+use App\Constants\Orders;
 use App\Constants\PaymentGateway;
+use App\Gateways\PlaceToPay\Statuses;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
@@ -27,10 +29,12 @@ class ShowTest extends BaseControllerTest
      */
     public function testAnUserWithPermissionsCanExecuteThisAction()
     {
+        $this->order->update(['status' => Orders::STATUS_CANCELED]);
         Payment::create([
             'order_id' => $this->order->id,
             'gateway'  => PaymentGateway::PLACE_TO_PAY,
-            'amount'   => $this->order->amount
+            'amount'   => $this->order->amount,
+            'status'   => Statuses::STATUS_REJECTED
         ]);
         $response = $this->actingAs($this->admin)
             ->get(route('users.orders.show', [$this->admin->id, $this->order->id]));

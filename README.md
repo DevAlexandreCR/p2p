@@ -130,7 +130,7 @@ Copy file `.env.example` in `.env` file and customize your environment to databa
 - To test app  
   Make sure to create testing database en set vars inside `.env.testing`
 ```bash
-- cp .env.example .env.testing
+- cp .env.testing.example .env.testing
 - php artisan test
 ```
 - Create super-admin user
