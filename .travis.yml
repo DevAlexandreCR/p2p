@@ -28,7 +28,7 @@ script:
   - composer phpcs-auto-check-project
   - npm run lint-check
   - composer phpstan
-  - php artisan test
+  - phpunit
 
 notifications:
   email:
