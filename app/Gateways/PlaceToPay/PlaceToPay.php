@@ -5,18 +5,17 @@ namespace App\Gateways\PlaceToPay;
 use App\Constants\Orders;
 use App\Constants\PaymentGateway;
 use App\Gateways\GatewayInterface;
+use App\Gateways\MakeRequest;
 use App\Models\Order;
 use App\Models\Payer;
 use App\Models\Payment;
 use Exception;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Http;
 
 class PlaceToPay implements GatewayInterface
 {
     use Authentication;
+    use MakeRequest;
 
     private string $gateway = PaymentGateway::PLACE_TO_PAY;
 
@@ -38,22 +37,16 @@ class PlaceToPay implements GatewayInterface
      */
     public function create(Order $order): RedirectResponse
     {
-        try {
-            $response = Http::asJson()->post(
-                $this->baseUrl . $this->endPoint,
-                $this->data($order)
-            )->object();
-            logger()->channel('daily')->debug(json_encode($response));
-            return $this->createPayment($response, $order, $this->gateway);
-        } catch (ClientException | ServerException $e) {
-            Payment::create([
-                'order_id' => $order->id,
-                'status'   => Statuses::STATUS_FAILED
-            ]);
+        $response = $this->makeRequest('POST', $this->baseUrl . $this->endPoint, $this->data($order));
 
-            return redirect()->to(route('users.orders.show', [auth()->id(), $order->id]))
-                ->with('message', $e->getMessage());
+        if ($response->status->status === Statuses::STATUS_OK) {
+            return $this->redirect($response, $order);
         }
+        $order->payments()->first()->update([
+            'status'   => Statuses::STATUS_FAILED
+        ]);
+        return redirect()->to(route('users.orders.show', [auth()->id(), $order->id]))
+                ->with('message', $response->status->message);
     }
 
     /**
@@ -64,19 +57,14 @@ class PlaceToPay implements GatewayInterface
     public function getInformation(Payment $payment): string
     {
         $url = $this->baseUrl . $this->endPoint . $payment->request_id;
-        try {
-            $response = Http::post(
-                $url,
-                [
-                    'auth' => $this->getAuth(),
-                ]
-            )->object();
-            logger()->channel('daily')->debug(json_encode($response));
-            $this->updatePayment($response, $payment);
-            return $response->status->status;
-        } catch (ClientException | ServerException $e) {
-            return $e->getMessage();
-        }
+
+        $response = $this->makeRequest('POST', $url, ['auth' => $this->getAuth()]);
+
+        logger()->channel('daily')->debug(json_encode($response));
+
+        $this->updatePayment($response, $payment);
+
+        return $response->status->status;
     }
 
     /**
@@ -86,18 +74,20 @@ class PlaceToPay implements GatewayInterface
      */
     public function retry(Payment $payment): RedirectResponse
     {
-        try {
-            $response = Http::asJson()->post(
-                $this->baseUrl . $this->endPoint,
-                $this->data($payment->order)
-            )->object();
-            logger()->channel('daily')->debug(json_encode($response));
-            $this->updatePayment($response, $payment);
+        $url = $this->baseUrl . $this->endPoint;
+
+        $response = $this->makeRequest('POST', $url, $this->data($payment->order));
+
+        logger()->channel('daily')->debug(json_encode($response));
+
+        $this->updatePayment($response, $payment);
+
+        if ($response->status->status === Statuses::STATUS_OK) {
             return redirect()->away($response->processUrl)->send();
-        } catch (ClientException | ServerException $e) {
-            return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
-                ->with('message', $e->getMessage());
         }
+
+        return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
+            ->with('message', $response->status->message);
     }
 
     /**
@@ -107,24 +97,19 @@ class PlaceToPay implements GatewayInterface
      */
     public function reverse(Payment $payment): RedirectResponse
     {
-        try {
-            $response = Http::post(
-                $this->baseUrl . $this->reverseEndPoint,
-                [
-                    'auth' => $this->getAuth(),
-                    'internalReference' => $payment->reference,
+        $url = $this->baseUrl . $this->reverseEndPoint;
 
-                ]
-            )->object();
-            logger()->channel('daily')->debug(json_encode($response));
-            $this->updatePayment($response, $payment);
+        $response = $this->makeRequest('POST', $url, [
+            'auth' => $this->getAuth(),
+            'internalReference' => $payment->reference
+        ]);
 
-            $message = $response->status->message;
-        } catch (ClientException | ServerException $e) {
-            $message = $e->getMessage();
-        }
+        $this->updatePayment($response, $payment);
+
+        logger()->channel('daily')->debug(json_encode($response));
+
         return redirect()->to(route('users.orders.show', [auth()->id(), $payment->order->id]))
-            ->with('message', $message);
+            ->with('message', $response->status->message);
     }
 
     /**
@@ -218,20 +203,16 @@ class PlaceToPay implements GatewayInterface
     /**
      * @param $response
      * @param Order $order
-     * @param string $gateway
      * @return RedirectResponse
      */
-    private function createPayment($response, Order $order, string $gateway): RedirectResponse
+    private function redirect($response, Order $order): RedirectResponse
     {
         $requestId = $response->requestId;
         $processUrl = $response->processUrl;
 
-        Payment::create([
-            'order_id'   => $order->id,
+        $order->payments()->first()->update([
             'request_id'  => $requestId,
             'process_url' => $processUrl,
-            'amount'     => $order->amount,
-            'gateway'    => $gateway
         ]);
 
         return redirect()->away($processUrl)->send();

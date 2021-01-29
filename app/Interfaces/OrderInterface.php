@@ -34,10 +34,11 @@ interface OrderInterface
     public function update(Order $order);
 
     /**
+     * @param Request $request
      * @param Order $order
      * @return mixed
      */
-    public function retry(Order $order);
+    public function retry(Request $request, Order $order);
 
     /**
      * @param Order $order
