@@ -23,7 +23,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $name = $this->faker->randomLetter . $this->faker->word,
+            'name' => $name = $this->faker->randomLetter . $this->faker->unique()->word,
             'reference' => $this->faker->unique()->numerify('#####'),
             'slug' => Str::slug($name),
             'description' => $this->faker->sentence(),
