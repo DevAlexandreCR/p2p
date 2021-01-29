@@ -53,7 +53,9 @@ class RetryTest extends BaseControllerTest
         ]);
 
         $response = $this->actingAs($this->admin)
-            ->post(route('users.orders.retry', [$this->admin->id, $this->order->id]));
+            ->post(route('users.orders.retry', [$this->admin->id, $this->order->id]), [
+                'gateway_name' => PaymentGateway::PLACE_TO_PAY
+            ]);
 
         Http::assertSent(function (Request $request) use ($url) {
             return $request->url() == $url . 'api/session/';

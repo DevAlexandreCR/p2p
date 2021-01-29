@@ -10,10 +10,7 @@ use App\Models\Order;
 use App\Models\Payer;
 use App\Models\Payment;
 use Exception;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Http;
 
 class PlaceToPay implements GatewayInterface
 {
@@ -43,10 +40,9 @@ class PlaceToPay implements GatewayInterface
         $response = $this->makeRequest('POST', $this->baseUrl . $this->endPoint, $this->data($order));
 
         if ($response->status->status === Statuses::STATUS_OK) {
-            return $this->createPayment($response, $order, $this->gateway);
+            return $this->redirect($response, $order);
         }
-        Payment::create([
-            'order_id' => $order->id,
+        $order->payments()->first()->update([
             'status'   => Statuses::STATUS_FAILED
         ]);
         return redirect()->to(route('users.orders.show', [auth()->id(), $order->id]))
@@ -207,20 +203,16 @@ class PlaceToPay implements GatewayInterface
     /**
      * @param $response
      * @param Order $order
-     * @param string $gateway
      * @return RedirectResponse
      */
-    private function createPayment($response, Order $order, string $gateway): RedirectResponse
+    private function redirect($response, Order $order): RedirectResponse
     {
         $requestId = $response->requestId;
         $processUrl = $response->processUrl;
 
-        Payment::create([
-            'order_id'   => $order->id,
+        $order->payments()->first()->update([
             'request_id'  => $requestId,
             'process_url' => $processUrl,
-            'amount'     => $order->amount,
-            'gateway'    => $gateway
         ]);
 
         return redirect()->away($processUrl)->send();

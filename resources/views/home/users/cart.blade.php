@@ -106,18 +106,34 @@
                         </div>
                         <div class="card-footer">
                             <div class="" role="group">
-                                <form class="btn-block" action="{{ route('users.orders.store', $user) }}"  method="post">
-                                    @csrf
-                                    <input type="hidden" name="user_id" value="{{$user->id}}">
-                                    <input type="hidden" name="gateway_name" value="placeToPay">
-                                    <button type="submit" class="btn btn-success me-2 w-100">{{trans('payment.pay')}}</button>
-                                </form>
+                                <button type="button" class="btn btn-success me-2 w-100" data-bs-toggle="modal"
+                                data-bs-target="#pay-modal">{{trans('payment.pay')}}</button>
                                 <a href="{{route('home')}}" type="button" class="link-dark w-100 mt-2">{{trans('payment.continue')}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             @endif
+            <div class="modal fade" tabindex="-1" id="pay-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ trans('payment.select') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <payment-gateway-component
+                                    :input-id="'payment_gateway'"
+                                    :form-id="'form-payment'"></payment-gateway-component>
+                        </div>
+                        <form class="btn-block" id="form-payment" action="{{ route('users.orders.store', $user) }}"  method="post">
+                            @csrf
+                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                            <input type="hidden" name="gateway_name" id="payment_gateway">
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

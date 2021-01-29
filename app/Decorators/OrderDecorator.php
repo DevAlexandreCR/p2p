@@ -2,6 +2,7 @@
 
 namespace App\Decorators;
 
+use App\Actions\CreateOrderAction;
 use App\Constants\Orders;
 use App\Constants\PaymentGateway;
 use App\Interfaces\OrderInterface;
@@ -44,18 +45,7 @@ class OrderDecorator implements OrderInterface
     {
         Cache::tags('users.orders')->flush();
 
-        $order = Order::create([
-            'user_id' => $user->id,
-            'amount'  => $user->cart->totalCart
-        ]);
-
-        $user->cart->products()->each(function ($product) use ($order) {
-            $order->products()->attach($product->id, [
-               'quantity' => $product->pivot->quantity
-            ]);
-        });
-
-        $user->cart->products()->detach();
+        $order = CreateOrderAction::execute($user, $request->input('gateway_name'));
 
         $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$request->input('gateway_name')];
 
@@ -82,11 +72,11 @@ class OrderDecorator implements OrderInterface
     /**
      * @inheritDoc
      */
-    public function retry(Order $order)
+    public function retry(Request $request, Order $order)
     {
         Cache::tags('users.orders')->flush();
 
-        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$order->payments()->first()->gateway];
+        $paymentGateway = PaymentGateway::PAYMENT_GATEWAYS[$request->input('gateway_name')];
 
         $payment = (new $paymentGateway())->create();
 

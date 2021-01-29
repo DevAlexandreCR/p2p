@@ -3,6 +3,7 @@
 namespace App\Gateways\FakePayment;
 
 use App\Constants\Orders;
+use App\Constants\PaymentGateway;
 use App\Gateways\GatewayInterface;
 use App\Models\Order;
 use App\Models\Payment;
@@ -11,12 +12,15 @@ use Illuminate\Http\RedirectResponse;
 class FakePayment implements GatewayInterface
 {
 
+    private string $gateway = PaymentGateway::FAKE_PAYMENT;
+
     /**
      * @inheritDoc
      */
     public function create(Order $order): RedirectResponse
     {
-        return back()->with('message', trans('payment.messages.gateway_not_configured'));
+        return redirect(route('users.orders.show', [auth()->id(), $order->id]))
+            ->with('message', trans('payment.messages.gateway_not_configured'));
     }
 
     /**
@@ -32,7 +36,8 @@ class FakePayment implements GatewayInterface
      */
     public function retry(Payment $payment): RedirectResponse
     {
-        return back();
+        return redirect(route('users.orders.show', [auth()->id(), $payment->order->id]))
+        ->with('message', trans('payment.messages.gateway_not_configured'));
     }
 
     /**
