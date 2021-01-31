@@ -11,7 +11,7 @@ import OrderByComponent from './components/OrderByComponent'
 import SwitchComponent from './components/SwitchComponent'
 import BackButtonComponent from './components/BackButtonComponent'
 import PaymentGatewaysComponent from './components/PaymentGatewaysComponent'
-import ButtonToggleModalComponent from "./components/ButtonToggleModalComponent";
+import ButtonToggleModalComponent from './components/ButtonToggleModalComponent'
 
 window.Vue = Vue
 window.EventBus = new Vue()

@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "ButtonToggleModalComponent",
+  name: 'ButtonToggleModalComponent',
   props: {
     product: {
       type: Object,

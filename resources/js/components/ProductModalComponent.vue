@@ -57,7 +57,7 @@ export default {
   },
 
   mounted () {
-    let self = this
+    const self = this
     window.EventBus.$on('product', function (product) {
       self.product = product
     })
