@@ -122,9 +122,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <payment-gateway-component
+                            <payment-gateways-component
                                     :input-id="'payment_gateway'"
-                                    :form-id="'form-payment'"></payment-gateway-component>
+                                    :form-id="'form-payment'"></payment-gateways-component>
                         </div>
                         <form class="btn-block" id="form-payment" action="{{ route('users.orders.store', $user) }}"  method="post">
                             @csrf

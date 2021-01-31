@@ -132,9 +132,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <payment-gateway-component
+                        <payment-gateways-component
                                 :input-id="'payment_gateway_retry'"
-                                :form-id="'form-payment_retry'"></payment-gateway-component>
+                                :form-id="'form-payment_retry'"></payment-gateways-component>
                     </div>
                     <form class="btn-block" id="form-payment_retry" action="{{ route('users.orders.retry', [auth()->id(), $payment->order->id]) }}"  method="post">
                         @csrf
