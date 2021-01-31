@@ -2,12 +2,16 @@
 
 namespace App\Gateways\PlaceToPay;
 
-use App\Constants\Orders;
 use App\Constants\PaymentGateway;
+use App\Gateways\GatewayContext;
 use App\Gateways\GatewayInterface;
 use App\Gateways\MakeRequest;
+use App\Gateways\PlaceToPay\PaymentStatuses\PaymentApproved;
+use App\Gateways\PlaceToPay\PaymentStatuses\PaymentDefault;
+use App\Gateways\PlaceToPay\PaymentStatuses\PaymentOk;
+use App\Gateways\PlaceToPay\PaymentStatuses\PaymentRefunded;
+use App\Gateways\Statuses;
 use App\Models\Order;
-use App\Models\Payer;
 use App\Models\Payment;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +28,17 @@ class PlaceToPay implements GatewayInterface
     private string $reverseEndPoint = 'api/reverse/';
 
     private string $baseUrl;
+
+    /**
+     * @var array|string[]
+     */
+    protected array $statuses = [
+      Statuses::STATUS_APPROVED => PaymentApproved::class,
+      Statuses::STATUS_REFUNDED => PaymentRefunded::class,
+      Statuses::STATUS_OK       => PaymentOk::class,
+      Statuses::STATUS_REJECTED => PaymentDefault::class,
+      Statuses::STATUS_FAILED   => PaymentDefault::class
+    ];
 
     public function __construct()
     {
@@ -146,57 +161,13 @@ class PlaceToPay implements GatewayInterface
      * @param $response
      * @param Payment $payment
      */
-    private function updatePayment($response, Payment $payment): void
+    public function updatePayment($response, Payment $payment): void
     {
-        $status = $this->changeStatus($response);
+        $response->status->status = $this->changeStatus($response);
 
-        switch ($status) {
-            case Statuses::STATUS_APPROVED:
-                $payer = $response->request->payer;
-                $dbPayer = Payer::create(
-                    [
-                        'document'      => $payer->document,
-                        'document_type' => $payer->documentType,
-                        'email'         => $payer->email,
-                        'name'          => $payer->name,
-                        'last_name'     => $payer->surname,
-                        'phone'         => $payer->mobile,
-                    ]
-                );
-                $payment->update([
-                    'payer_id'   => $dbPayer->id,
-                    'reference'  => $response->payment[0]->internalReference,
-                    'method'     => $response->payment[0]->paymentMethod,
-                    'last_digit' => $response->payment[0]->processorFields[0]->value,
-                    'status'     => $status
-                ]);
-                $payment->order()->update([
-                    'status' => Orders::STATUS_COMPLETED
-                ]);
-                break;
-            case Statuses::STATUS_REFUNDED:
-                $payment->update([
-                    'status' => Statuses::STATUS_REFUNDED
-                ]);
-                $payment->order()->update([
-                    'status' => Orders::STATUS_CANCELED
-                ]);
-                break;
-            case Statuses::STATUS_OK:
-                $requestId = $response->requestId;
-                $processUrl = $response->processUrl;
-                $payment->update([
-                    'request_id'  => $requestId,
-                    'process_url' => $processUrl,
-                    'status'      => Statuses::STATUS_PENDING
-                ]);
-                break;
-            default:
-                $payment->update([
-                    'status' => $status
-                ]);
-                break;
-        }
+        $updateStatus = new $this->statuses[$response->status->status];
+
+        (new GatewayContext($updateStatus))->updatePayment($payment, $response);
     }
 
     /**

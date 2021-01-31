@@ -19,7 +19,8 @@ class Payment extends Model
         'reference',
         'method',
         'payer_id',
-        'currency'
+        'currency',
+        'gateway'
     ];
 
     /**

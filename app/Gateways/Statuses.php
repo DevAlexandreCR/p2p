@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Gateways\PlaceToPay;
+namespace App\Gateways;
 
 use MyCLabs\Enum\Enum;
 
