@@ -4,7 +4,7 @@ namespace Tests\Feature\Http\Controllers\OrderController;
 
 use App\Constants\Orders;
 use App\Constants\PaymentGateway;
-use App\Gateways\PlaceToPay\Statuses;
+use App\Gateways\Statuses;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;

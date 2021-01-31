@@ -31,4 +31,12 @@ interface GatewayInterface
      * @return RedirectResponse
      */
     public function reverse(Payment $payment): RedirectResponse;
+
+    /**
+     * Handle response status
+     *
+     * @param $response
+     * @param Payment $payment
+     */
+    public function updatePayment($response, Payment $payment): void;
 }

@@ -1,12 +1,12 @@
 <div>
     @switch($payment->status)
-        @case(\App\Gateways\PlaceToPay\Statuses::STATUS_FAILED)
+        @case(\App\Gateways\Statuses::STATUS_FAILED)
             <p><small>{{session('message')}}</small></p>
             <p><small>{{trans('payment.messages.failed')}}</small></p>
         <button type="button" class="btn btn-success btn-sm me-2 w-100" data-bs-toggle="modal"
                 data-bs-target="#retry-modal">{{trans('payment.retry')}}</button>
         @break
-        @case(\App\Gateways\PlaceToPay\Statuses::STATUS_PENDING)
+        @case(\App\Gateways\Statuses::STATUS_PENDING)
             <p><small>{{trans('payment.messages.pending')}}</small></p>
             <form action="{{route('users.orders.update', [auth()->id(), $payment->order->id])}}" method="post">
                 @csrf
@@ -16,7 +16,7 @@
             <p><small>{{trans('payment.messages.retry_again')}}</small></p>
                 <a class="btn btn-success btn-sm w-100" href="{{$payment->process_url}}">{{trans('payment.retry')}}</a>
         @break
-        @case(\App\Gateways\PlaceToPay\Statuses::STATUS_APPROVED)
+        @case(\App\Gateways\Statuses::STATUS_APPROVED)
             <p><small>{{trans('payment.messages.preparing')}}</small></p>
                 <h3>{{trans('payer.data')}}</h3>
                 <div class="row row-cols-2">
@@ -81,12 +81,12 @@
                 <button type="submit" class="btn w-100 btn-sm btn-danger">{{trans('payment.cancel')}}</button>
             </form>
         @break
-        @case(\App\Gateways\PlaceToPay\Statuses::STATUS_REJECTED)
+        @case(\App\Gateways\Statuses::STATUS_REJECTED)
             <p><small>{{trans('payment.messages.rejected')}}</small></p>
         <button type="button" class="btn btn-success btn-sm me-2 w-100" data-bs-toggle="modal"
                 data-bs-target="#retry-modal">{{trans('payment.retry')}}</button>
         @break
-        @case(\App\Gateways\PlaceToPay\Statuses::STATUS_REFUNDED)
+        @case(\App\Gateways\Statuses::STATUS_REFUNDED)
             <p><small>{{trans('orders.statuses.canceled')}}</small></p>
             @if($payment->payer)
                 <div class="row row-cols-2">

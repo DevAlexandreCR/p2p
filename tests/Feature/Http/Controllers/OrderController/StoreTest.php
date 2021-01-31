@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\OrderController;
 
+use App\Constants\Orders;
 use App\Constants\PaymentGateway;
-use App\Gateways\PlaceToPay\Statuses;
+use App\Gateways\Statuses;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Client\Request;
@@ -22,6 +23,14 @@ class StoreTest extends BaseControllerTest
         $response
             ->assertStatus(302)
             ->assertSessionHas('message', trans('payment.messages.gateway_not_configured'));
+
+        $this->assertDatabaseHas('orders', [
+            'status' => Orders::STATUS_COMPLETED
+        ]);
+        $this->assertDatabaseHas('payments', [
+            'status' => Statuses::STATUS_OK,
+            'gateway'=> PaymentGateway::FAKE_PAYMENT
+        ]);
     }
     /**
      * Test an user without permissions can't execute this action.

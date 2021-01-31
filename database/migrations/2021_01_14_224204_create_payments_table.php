@@ -2,7 +2,7 @@
 
 use App\Constants\Currencies;
 use App\Constants\PaymentGateway;
-use App\Gateways\PlaceToPay\Statuses;
+use App\Gateways\Statuses;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
