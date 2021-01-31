@@ -175,9 +175,8 @@ class PlaceToPay implements GatewayInterface
                 ]);
                 break;
             case Statuses::STATUS_REFUNDED:
-                $payment->order->products()->detach();
                 $payment->update([
-                    'status'      => Statuses::STATUS_REFUNDED
+                    'status'=> Statuses::STATUS_REFUNDED
                 ]);
                 $payment->order()->update([
                     'status' => Orders::STATUS_CANCELED
