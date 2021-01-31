@@ -17,6 +17,4 @@ class UserObserver
     {
         UserCreated::dispatch($user);
     }
-
-
 }
