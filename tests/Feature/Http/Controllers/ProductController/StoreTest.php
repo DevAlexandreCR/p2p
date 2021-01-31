@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\ProductController;
 
 use App\Constants\Permissions;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -14,41 +15,26 @@ class StoreTest extends BaseControllerTest
 
     /**
      * Test return errors when data is not valid
+     * @dataProvider requiredFormValidationProvider
+     * @param $formInput
+     * @param $formInputValue
      * @return void
      */
-    public function testResponseHasErrorsWhenDataIsNotValid()
+    public function testResponseHasErrorsWhenDataIsNotValid($formInput, $formInputValue)
     {
         $this->admin->givePermissionTo(Permissions::CREATE_PRODUCTS);
 
+        Product::factory()->create([
+            'reference' => '1111'
+        ]);
+
         $response = $this->from(route('products.create'))
-            ->actingAs($this->admin)->post(route('products.store'), [
-                'name' => $name = 0,
-                'description' => $description = $this->faker->firstName,
-                'reference' => $reference = $this->faker->numerify('###'),
-                'price' => $price = 0,
-                'stock' => $stock = 0,
-                'image' => 'image'
-            ]);
+            ->actingAs($this->admin)->post(route('products.store'), [$formInput => $formInputValue]);
 
         $response
             ->assertStatus(302)
             ->assertRedirect(route('products.create'))
-            ->assertSessionHasErrors([
-                'name',
-                'description',
-                'reference',
-                'price',
-                'stock',
-                'image'
-            ]);
-
-        $this->assertDatabaseMissing('products', [
-            'name' => $name,
-            'description' => $description,
-            'reference' => $reference,
-            'price' => $price,
-            'stock' => $stock
-        ]);
+            ->assertSessionHasErrors($formInput);
     }
 
     /**
@@ -120,5 +106,27 @@ class StoreTest extends BaseControllerTest
         $response
             ->assertStatus(302)
             ->assertRedirect(route('login'));
+    }
+
+    public function requiredFormValidationProvider(): array
+    {
+        return [
+            ['name', 1234],
+            ['name', 'l'],
+            ['name', 'more of thirty characters, validation should fail'],
+            ['description', ''],
+            ['description', 'less 10'],
+            ['reference', null],
+            ['reference', '1111'],
+            ['reference', 'more than ten characters'],
+            ['reference', '1111'],
+            ['stock', ''],
+            ['stock', 'uno'],
+            ['stock', -1],
+            ['price', -1],
+            ['price', ''],
+            ['image', 'image'],
+            ['image', ''],
+        ];
     }
 }
