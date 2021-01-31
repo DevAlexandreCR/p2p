@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
         return [
             'product_id' => ['required', 'exists:products,id'],
             'quantity'   => ['required', 'min:1', 'integer',
-                'max:' . optional(Product::find($this->get('product_id')))->stock]
+                'max:' . optional(Product::find($this->input('product_id')))->stock]
         ];
     }
 }
