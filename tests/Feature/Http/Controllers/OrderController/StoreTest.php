@@ -29,7 +29,7 @@ class StoreTest extends BaseControllerTest
         ]);
         $this->assertDatabaseHas('payments', [
             'status' => Statuses::STATUS_OK,
-            'gateway'=> PaymentGateway::FAKE_PAYMENT
+            'gateway' => PaymentGateway::FAKE_PAYMENT
         ]);
     }
     /**

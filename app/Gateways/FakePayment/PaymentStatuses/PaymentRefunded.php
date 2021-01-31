@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Gateways\FakePayment\PaymentStatuses;
-
 
 use App\Constants\Orders;
 use App\Gateways\Statuses;

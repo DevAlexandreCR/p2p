@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Gateways\PlaceToPay\PaymentStatuses;
-
 
 use App\Constants\Orders;
 use App\Gateways\Statuses;

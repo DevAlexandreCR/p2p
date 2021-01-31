@@ -165,7 +165,7 @@ class PlaceToPay implements GatewayInterface
     {
         $response->status->status = $this->changeStatus($response);
 
-        $updateStatus = new $this->statuses[$response->status->status];
+        $updateStatus = new $this->statuses[$response->status->status]();
 
         (new GatewayContext($updateStatus))->updatePayment($payment, $response);
     }

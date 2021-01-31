@@ -78,7 +78,7 @@ class FakePayment implements GatewayInterface
      */
     public function updatePayment($response, Payment $payment): void
     {
-        $updateStatus = new $this->statuses[$response->status->status];
+        $updateStatus = new $this->statuses[$response->status->status]();
 
         (new GatewayContext($updateStatus))->updatePayment($payment, $response);
     }

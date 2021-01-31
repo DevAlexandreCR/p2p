@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Gateways\PlaceToPay\PaymentStatuses;
-
 
 use App\Gateways\Statuses;
 use App\Gateways\UpdatePaymentInterface;
