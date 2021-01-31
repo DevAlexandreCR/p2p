@@ -3,29 +3,29 @@
   <div class="modal fade" id="product-modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="label-product-modal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <img :src="imagePath + 'default.png'" class="card-img-top img-product-detail" alt="...">
+        <img :src="imagePath + product.image" class="card-img-top img-product-detail" alt="...">
         <div class="modal-body">
           <table class="table table-borderless">
             <thead>
             <tr>
               <th>Name:</th>
-              <td id="productName"></td>
+              <td id="productName">{{ product.name }}</td>
             </tr>
             <tr>
               <th>Reference:</th>
-              <td id="productReference"></td>
+              <td id="productReference">{{ product.reference }}</td>
             </tr>
             <tr>
               <th>Description:</th>
-              <td id="productDescription"></td>
+              <td id="productDescription">{{ product.description }}</td>
             </tr>
             <tr>
               <th>Stock:</th>
-              <td id="productStock"></td>
+              <td id="productStock">{{ product.stock }}</td>
             </tr>
             <tr>
               <th>Price:</th>
-              <td id="productPrice"></td>
+              <td id="productPrice">{{ product.price }}</td>
             </tr>
             </thead>
           </table>
@@ -49,24 +49,17 @@ export default {
         reference: '',
         description: '',
         stock: 0,
-        price: 0
+        price: 0,
+        image: 'default.png'
       },
       imagePath: window.imagePath
     }
   },
 
   mounted () {
-    const myModalEl = document.getElementById('product-modal')
-
-    myModalEl.addEventListener('show.bs.modal', function (event) {
-      const button = event.relatedTarget
-      this.product = JSON.parse(button.getAttribute('data-bs-product'))
-      myModalEl.querySelector('.modal-body td[id="productName"]').textContent = this.product.name
-      myModalEl.querySelector('.modal-body td[id="productReference"]').textContent = this.product.reference
-      myModalEl.querySelector('.modal-body td[id="productDescription"]').textContent = this.product.description
-      myModalEl.querySelector('.modal-body td[id="productStock"]').textContent = this.product.stock
-      myModalEl.querySelector('.modal-body td[id="productPrice"]').textContent = this.product.price
-      myModalEl.querySelector('.modal-content img').src = window.imagePath + this.product.image
+    const self = this
+    window.EventBus.$on('product', function (product) {
+      self.product = product
     })
   }
 }

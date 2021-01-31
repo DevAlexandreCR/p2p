@@ -46,10 +46,9 @@
                             <td>{{ $product->stock }}</td>
                             <td class="text-center" style="border-left: groove">
                                 <div class="d-inline-flex text-center">
-                                    <button class="btn btn-light btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#product-modal" data-bs-product="{{ $product }}">
-                                        <i class="bi bi-eye-fill"></i>
-                                    </button>
+                                    <button-toggle-modal-component
+                                            :product="{{$product}}">
+                                    </button-toggle-modal-component>
                                     <a type="button" class="btn btn-light mr-4 btn-sm"
                                        data-toggle="tooltip"
                                        data-placement="top"
