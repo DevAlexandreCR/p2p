@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     show: function () {
-      window.EventBus.$emit('product', this.product)
+      this.$root.$emit('product', this.product)
     }
   }
 }
