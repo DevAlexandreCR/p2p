@@ -11,25 +11,25 @@ import OrderByComponent from './components/OrderByComponent'
 import SwitchComponent from './components/SwitchComponent'
 import BackButtonComponent from './components/BackButtonComponent'
 import PaymentGatewaysComponent from './components/PaymentGatewaysComponent'
-import ButtonToggleModalComponent from './components/ButtonToggleModalComponent'
+import PaymentComponent from './components/PaymentComponent'
+import NpmComponent from './components/NpmComponent'
 
 window.Vue = Vue
-window.EventBus = new Vue()
+
+Vue.component('toast-component', ToastComponent)
+Vue.component('button-toggle-component', ButtonToggleComponent)
+Vue.component('input-image-component', InputImageComponent)
+Vue.component('product-modal-component', ProductModalComponent)
+Vue.component('user-modal-component', UserModalComponent)
+Vue.component('select-stock-component', SelectStockComponent)
+Vue.component('select-quantity-component', SelectQuantityComponent)
+Vue.component('order-by-component', OrderByComponent)
+Vue.component('switch-component', SwitchComponent)
+Vue.component('back-button-component', BackButtonComponent)
+Vue.component('payment-gateway-component', PaymentGatewaysComponent)
+Vue.component('payment-component', PaymentComponent)
+Vue.component('npm-component', NpmComponent)
 
 new Vue({
-  el: '#app',
-  components: {
-    ToastComponent,
-    ButtonToggleComponent,
-    InputImageComponent,
-    ProductModalComponent,
-    UserModalComponent,
-    SelectStockComponent,
-    SelectQuantityComponent,
-    OrderByComponent,
-    SwitchComponent,
-    BackButtonComponent,
-    PaymentGatewaysComponent,
-    ButtonToggleModalComponent
-  }
+  el: '#app'
 })
