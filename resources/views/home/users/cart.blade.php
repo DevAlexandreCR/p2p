@@ -106,8 +106,12 @@
                         </div>
                         <div class="card-footer">
                             <div class="" role="group">
-                                <button type="button" class="btn btn-success me-2 w-100" data-bs-toggle="modal"
-                                data-bs-target="#pay-modal">{{trans('payment.pay')}}</button>
+                                <button type="button" onclick="demo()" 
+                                data-bs-toggle="modal" data-bs-target="#spinner"
+                                class="btn btn-success me-2 w-100"
+                                >{{trans('payment.pay')}}</button>
+                                <a hidden id="go-demo" type="button" href="{{route('demo', $user->cart->totalCart)}}" class="btn btn-success me-2 w-100"
+                                    >{{trans('payment.pay')}}</a>
                                 <a href="{{route('home')}}" type="button" class="link-dark w-100 mt-2">{{trans('payment.continue')}}</a>
                             </div>
                         </div>
@@ -135,5 +139,29 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="spinner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-sm modal-dialog-centered">
+            <div class="modal-content ml-4" style="height: 15rem;">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Checkout...</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="spinner-border text-danger" style="width: 7rem; height: 7rem;" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
 @endsection
+<script>
+    async function demo() {
+        await setTimeout(() => {
+            document.getElementById('go-demo').click();
+        }, 2000)
+    }
+</script>

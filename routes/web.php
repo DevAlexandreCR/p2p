@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
@@ -24,6 +25,7 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/{product:slug}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
+Route::get('demo/npm', [DemoController::class, 'npm'])->name('demo.npm');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/main', [App\Http\Controllers\DashboardController::class, 'main'])->name('dashboard');
@@ -46,4 +48,6 @@ Route::middleware('auth')->prefix('user')->group(function() {
         ->name('users.orders.retry');
     Route::post('/{user}/orders/{order}/reverse', [OrderController::class, 'reverse'])
         ->name('users.orders.reverse');
+    Route::get('/demo/{value}', [DemoController::class, 'demo'])
+        ->name('demo');
 });
